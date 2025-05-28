@@ -1,0 +1,164 @@
+# ========================================================
+# GLOBAL IGNORE
+# ========================================================
+*.log
+*.pot
+*.py[cod]
+*.swp
+*.swo
+*.DS_Store
+*.sass-cache
+*.tmp
+*.bak
+*.orig
+*.rej
+*.seed
+*~
+*.coverage
+*.tgz
+*.tar.gz
+*.zip
+*.rar
+*.7z
+*.lock
+*.sqlite3
+*.env
+.env.*
+.envrc
+
+# ========================================================
+# PYTHON / DJANGO
+# ========================================================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+instance/
+*.db-journal
+local_settings.py
+
+# Django-specific
+/staticfiles/
+/media/
+/static/
+/migrations/
+/*.pem
+/secrets.json
+
+# Django PyMongo (non-relational structure)
+/__pycache__/
+/config/__pycache__/
+/backend/**/__pycache__/
+/backend/**/migrations/
+
+# Pipenv / Virtualenv
+.venv/
+venv/
+ENV/
+env/
+Pipfile.lock
+poetry.lock
+poetry.toml
+
+# Coverage
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# MyPy & Pyright
+.mypy_cache/
+.pyright/
+
+# VS Code Python stuff
+.vscode/
+*.code-workspace
+
+# ========================================================
+# FRONTEND (React JS)
+# ========================================================
+/frontend/node_modules/
+/frontend/.env
+/frontend/.env.*  # Vercel, Netlify env files
+/frontend/build/
+/frontend/dist/
+/frontend/.next/   # Next.js if you use it later
+
+# React Testing
+/frontend/coverage/
+/frontend/junit.xml
+
+# npm / yarn
+/frontend/package-lock.json
+/frontend/yarn.lock
+/frontend/pnpm-lock.yaml
+/frontend/.parcel-cache/
+
+# Log & System
+/frontend/logs
+/frontend/*.log
+/frontend/.eslintcache
+
+# ========================================================
+# SYSTEM / OS / IDE
+# ========================================================
+.idea/
+*.iml
+*.sublime*
+*.vscode/
+*.code-workspace
+Thumbs.db
+.DS_Store
+ehthumbs.db
+*.stackdump
+Desktop.ini
+
+# ========================================================
+# DEPLOYMENT / CONFIGURATION FILES
+# ========================================================
+*.pem
+*.key
+*.crt
+*.csr
+
+# Docker
+docker-compose.override.yml
+.docker/
+.dockerignore
+
+# Gunicorn / UWSGI / Nginx logs
+*.pid
+*.sock
+*.log
+
+# Git Credentials
+*.git-credentials
+
+# Localhost SSL
+certs/
+certs/**
+
+# ========================================================
+# VERCEL / NETLIFY / RENDER / HEROKU
+# ========================================================
+.vercel/
+.netlify/
+render.yaml
+Procfile
+runtime.txt
+
+# ========================================================
+# BACKUP & TEMP FILES
+# ========================================================
+*.bak
+*.tmp
+*.temp
+*.old
+*.orig
+*~
