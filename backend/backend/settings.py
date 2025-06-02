@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     "rest_framework", 
     'rest_framework_simplejwt',
+    'multiple_product_page.apps.MultipleProductPageConfig',
     'user_auth.apps.UserAuthConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -133,3 +134,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Load environment variables
 MONGODB_URL = os.getenv('MongoDB')
 JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # your React dev origin
+]

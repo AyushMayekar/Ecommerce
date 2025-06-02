@@ -186,7 +186,7 @@ class LoginView(APIView):
                 access_token,
                 httponly=True,
                 secure=True,  # True for production (use HTTPS)
-                samesite="Strict",
+                samesite="None",
                 max_age=15 * 60
             )
             response.set_cookie(
@@ -194,7 +194,7 @@ class LoginView(APIView):
                 refresh_token,
                 httponly=True,
                 secure=True,
-                samesite="Strict",
+                samesite="None",
                 max_age=7 * 24 * 60 * 60
             )
 
