@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "rest_framework", 
     'rest_framework_simplejwt',
     'multiple_product_page.apps.MultipleProductPageConfig',
+    'admin_operations.apps.AdminOperationsConfig',
     'user_auth.apps.UserAuthConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -131,9 +132,18 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom settings
+
 # Load environment variables
 MONGODB_URL = os.getenv('MongoDB')
 JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
+
+# Cloudinary settings
+CLOUDINARY_URL = os.getenv('CLOUDINARY_URL')
+CLOUD_NAME = os.getenv('CLOUD_NAME')
+CLOUDINARY_API_KEY = os.getenv('CLOUDINARY_API_KEY')
+CLOUDINARY_API_SECRET = os.getenv('CLOUDINARY_API_SECRET')
+
+# CORS settings
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # your React dev origin

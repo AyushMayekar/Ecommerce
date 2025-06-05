@@ -1,9 +1,11 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import BaseAuthentication
+from rest_framework import serializers
 from django.contrib.auth.hashers import make_password, check_password
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
 from django.conf import settings
 import jwt
@@ -49,9 +51,20 @@ def is_email(string):
     logger.debug(f"Is email: {is_email}")
     return is_email
 
-# Serializer for registration
-from rest_framework import serializers
+# Utility function to check if its an admin
 
+class IsAdminUser(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.get("user_role") == "admin"
+
+def is_admin_account(username, email):
+    # Example: usernames starting with 'admin_' and emails ending with '@eaglehub.in'
+    return (
+        re.match(r"^admin_[a-z]+_\d+$", username) and 
+        email.endswith("@eaglehub.in")
+    )
+
+# Serializer for registration
 class RegistrationSerializer(serializers.Serializer):
     username = serializers.CharField(min_length=4)
     password = serializers.CharField(write_only=True, min_length=8)
@@ -63,10 +76,15 @@ class UserObject:
         self.id = str(user_data["_id"])
         self.username = user_data["username"]
         self.email = user_data.get("email", "")
+        self.user_role = user_data.get("user_role", "user")
 
     @property
     def is_authenticated(self):
         return True
+    
+    @property
+    def is_staff(self):
+        return self.user_role == "admin" 
 
     def get_username(self):
         return self.username
@@ -128,6 +146,10 @@ class RegisterView(APIView):
         if users_collection.find_one({"username": username}) or users_collection.find_one({"email": email}):
             logger.debug(f"User already exists, try using different username or email or both: {username}, {email}")
             return Response({"error": "User already exists"}, status=400)
+        
+        # Check if it's an admin account
+        user_role = "admin" if is_admin_account(username, email) else "user"
+        logger.debug(f"Assigned role: {user_role}")
 
         # Store user
         try:
@@ -135,6 +157,7 @@ class RegisterView(APIView):
                 "username": username,
                 "password": make_password(password),
                 "email": email,
+                "user_role": user_role,
             })
             logger.info(f"User registered: {username}")
             return Response({"success": True, "message": "User registered successfully"}, status=201)
