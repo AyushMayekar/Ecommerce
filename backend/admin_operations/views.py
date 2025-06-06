@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from user_auth.views import MongoDBJWTAuthentication
 from django.conf import settings
+from django.core.cache import cache
 import cloudinary.uploader
 import uuid
 from pymongo import MongoClient
@@ -12,6 +13,7 @@ from pymongo import MongoClient
 client = MongoClient(settings.MONGODB_URL)
 db = client["EagleHub"]
 products_collection = db["Products"]
+orders_collection = db["Orders"]
 
 # Cloudinary configuration
 cloudinary.config( 
@@ -43,6 +45,8 @@ def upload_files_to_cloudinary(files, folder):
         except Exception as e:
             print(f"Upload failed for {file.name}: {e}")
     return urls
+
+# Product Management Views
 
 class AddProductView(APIView):
     authentication_classes = [MongoDBJWTAuthentication]
@@ -98,7 +102,6 @@ class DeleteProductView(APIView):
         else:
             return Response({"message": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
 
-
 class UpdateProductView(APIView):
     authentication_classes = [MongoDBJWTAuthentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
@@ -153,3 +156,48 @@ class UpdateProductView(APIView):
             return Response({"message": "No changes made"}, status=200)
 
         return Response({"message": "Product updated successfully"})
+
+class ReadProductView(APIView):
+    authentication_classes = [MongoDBJWTAuthentication]
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def get(self, request):
+        # Extract filters from query params
+        category = request.GET.get("category")
+        price_min = request.GET.get("price_min")
+        price_max = request.GET.get("price_max")
+        search = request.GET.get("search")
+
+        # Build MongoDB filter
+        query_filter = {}
+
+        if category:
+            query_filter["category"] = category
+
+        if price_min or price_max:
+            price_filter = {}
+            if price_min:
+                price_filter["$gte"] = float(price_min)
+            if price_max:
+                price_filter["$lte"] = float(price_max)
+            query_filter["price"] = price_filter
+
+        if search:
+            query_filter["name"] = {"$regex": search, "$options": "i"}
+
+        # Use cache key based on filters
+        cache_key = f"products:{category}:{price_min}:{price_max}:{search}"
+        cached_data = cache.get(cache_key)
+
+        if cached_data:
+            return Response(cached_data, status=status.HTTP_200_OK)
+
+        # If not in cache, query MongoDB
+        products = list(products_collection.find(query_filter, {"_id": 0}))
+
+        # Store in cache for 5 minutes (300 seconds)
+        cache.set(cache_key, products, timeout=300)
+
+        return Response(products, status=status.HTTP_200_OK)    
+
+    # Order Management Views

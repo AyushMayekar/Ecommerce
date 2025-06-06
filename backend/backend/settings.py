@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "rest_framework", 
     'rest_framework_simplejwt',
     'multiple_product_page.apps.MultipleProductPageConfig',
+    'single_product_api.apps.SingleProductApiConfig',
     'admin_operations.apps.AdminOperationsConfig',
     'user_auth.apps.UserAuthConfig',
     'django.contrib.auth',
