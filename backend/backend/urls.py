@@ -23,4 +23,5 @@ urlpatterns = [
     path('', include('multiple_product_page.urls')),
     path('', include('admin_operations.urls')),
     path('', include('single_product_api.urls')),
+    path('', include('payment_gateway.urls')),
 ]

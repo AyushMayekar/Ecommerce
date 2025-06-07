@@ -2,7 +2,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import BaseAuthentication
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password, check_password
-from django.http import JsonResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.views import APIView
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import BasePermission
@@ -167,6 +167,7 @@ class RegisterView(APIView):
 
 # Login Functionality
 class LoginView(APIView):
+    @ensure_csrf_cookie
     def post(self, request):
         logger.debug("LoginView: Processing login.")
         user_input = request.data.get("username or email").strip().lower()

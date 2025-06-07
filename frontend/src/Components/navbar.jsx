@@ -9,6 +9,7 @@ const Navbar = () => {
                 <Link to="/products" style={{ margin: '0 1rem' }}>Products</Link>
                 <Link to="/contact" style={{ margin: '0 1rem' }}>Contact</Link>
                 <Link to="/policy" style={{ margin: '0 1rem' }}>Policy</Link>
+                <Link to="/payment_gateway" style={{ margin: '0 1rem' }}>Payment Gateway</Link>
             </div>
         </nav>
     )

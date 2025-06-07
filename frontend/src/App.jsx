@@ -5,6 +5,7 @@ import Home from './Pages/home'
 import Contact from './Pages/contact'
 import Products from './Pages/products'
 import Policy from './Pages/policy'
+import PaymentTestPage from './Pages/payment_gateway'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/policy" element={<Policy />} />
+          <Route path="/payment_gateway" element={<PaymentTestPage />} />
         </Routes>
       </main>
       <Footer />

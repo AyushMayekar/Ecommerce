@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'multiple_product_page.apps.MultipleProductPageConfig',
     'single_product_api.apps.SingleProductApiConfig',
+    'payment_gateway.apps.PaymentGatewayConfig',
     'admin_operations.apps.AdminOperationsConfig',
     'user_auth.apps.UserAuthConfig',
     'django.contrib.auth',
@@ -144,8 +145,17 @@ CLOUD_NAME = os.getenv('CLOUD_NAME')
 CLOUDINARY_API_KEY = os.getenv('CLOUDINARY_API_KEY')
 CLOUDINARY_API_SECRET = os.getenv('CLOUDINARY_API_SECRET')
 
+# Razorpay settings
+TEST_KEY_SECRET = os.getenv('TEST_KEY_SECRET')
+TEST_KEY_ID = os.getenv('TEST_KEY_ID')
+
 # CORS settings
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # your React dev origin
+    "http://localhost:5173",  
 ]
+
+# CSRF settings
+CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
