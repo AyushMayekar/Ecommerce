@@ -2,7 +2,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import BaseAuthentication
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password, check_password
-from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.views import APIView
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import BasePermission
@@ -88,7 +87,7 @@ class UserObject:
 
     def get_username(self):
         return self.username
-    
+
 # Authentication Class
 class MongoDBJWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
@@ -167,10 +166,9 @@ class RegisterView(APIView):
 
 # Login Functionality
 class LoginView(APIView):
-    @ensure_csrf_cookie
     def post(self, request):
         logger.debug("LoginView: Processing login.")
-        user_input = request.data.get("username or email").strip().lower()
+        user_input = request.data.get("username_or_email").strip().lower()
         password = request.data.get("password").strip().lower()
         
         if not user_input or not password:
@@ -217,7 +215,7 @@ class LoginView(APIView):
                 "refresh_token",
                 refresh_token,
                 httponly=True,
-                secure=True,
+                secure=True,  # True for production (use HTTPS)
                 samesite="None",
                 max_age=7 * 24 * 60 * 60
             )
@@ -334,3 +332,15 @@ class RefreshTokenView(APIView):
         except Exception as e:
             logger.error(f"Refresh token error: {e}")
             return Response({"error": "Refresh failed"}, status=500)
+
+# Check Authentication Initialy
+class CheckAuthView(APIView):
+    authentication_classes = [MongoDBJWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            user = request.user  
+            return Response({"message": "Authenticated"}, status=200)
+        except AuthenticationFailed:
+            return Response({"error": "Not authenticated"}, status=401)

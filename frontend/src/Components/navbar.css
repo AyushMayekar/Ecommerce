@@ -1,0 +1,113 @@
+/* src/components/Navbar.css */
+.navbar {
+    position: sticky;
+    /* ✅ Fixed without covering scrollbar */
+    top: 0;
+    width: 100%;
+    /* ✅ Ensures no overlap with scroll */
+    height: 65px;
+    background: linear-gradient(90deg, #0033668c, #003366c1, #003366);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.836);
+    backdrop-filter: blur(8px);
+    border-radius: 0 0 8px 8px;
+    /* ✅ Slightly curved edges */
+    box-sizing: border-box;
+}
+
+/* Website Logo */
+.navbar-logo {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    font-family: 'Segoe UI', sans-serif;
+    text-shadow: 1px 1px 5px rgb(0, 0, 0);
+    display: flex;
+    align-items: center;
+}
+
+.hub-highlight {
+    color: #fdfdfb;
+    font-weight: 900;
+    margin-left: 2px;
+}
+
+/* Navigation Links */
+.navbar-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.navbar-links a {
+    color: #fff;
+    font-weight: 500;
+    font-size: 1rem;
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 2px;
+    transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+    color: rgb(193, 240, 118);
+}
+
+.navbar-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0%;
+    height: 2px;
+    background-color: rgb(193, 240, 118);
+    transition: width 0.3s ease;
+}
+
+.navbar-links a:hover::after {
+    width: 100%;
+}
+
+/* Icons Section */
+.navbar-icons {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 1.3rem;
+    align-items: center;
+}
+
+.navbar-icons a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: transform 0.2s ease, color 0.3s ease;
+}
+
+.navbar-icons a:hover {
+    transform: scale(1.1);
+    color: rgb(193, 240, 118);
+}
+
+/* Icon Label Text */
+.icon-label {
+    font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar-links {
+        display: none;
+    }
+
+    .navbar-icons {
+        gap: 1rem;
+    }
+}

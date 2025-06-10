@@ -1,18 +1,33 @@
-import { Link } from 'react-router-dom'
+import React from "react";
+import "./navbar.css";
+import { CgProfile } from "react-icons/cg";
+import { MdOutlineShoppingCart } from "react-icons/md";
 
 const Navbar = () => {
     return (
-        <nav style={{ padding: '1rem', borderBottom: '1px solid #ccc' }}>
-            <h2 style={{ display: 'inline' }}>MyStore</h2>
-            <div style={{ float: 'right' }}>
-                <Link to="/" style={{ margin: '0 1rem' }}>Home</Link>
-                <Link to="/products" style={{ margin: '0 1rem' }}>Products</Link>
-                <Link to="/contact" style={{ margin: '0 1rem' }}>Contact</Link>
-                <Link to="/policy" style={{ margin: '0 1rem' }}>Policy</Link>
-                <Link to="/payment_gateway" style={{ margin: '0 1rem' }}>Payment Gateway</Link>
+        <div className="navbar">
+            <div className="navbar-logo">
+                <span>Eagle<span className="hub-highlight">Hub</span></span>
             </div>
-        </nav>
-    )
-}
 
-export default Navbar
+            <div className="navbar-links">
+                <a href="/home">  Home</a>
+                <a href="/myorders">My Orders</a>
+                <a href="/contact">Contact Us</a>
+                <a href="/policy">Policy</a>
+            </div>
+
+            <div className="navbar-icons">
+                <a href="/cart" title="Cart">
+                    <MdOutlineShoppingCart />
+    <span className="icon-label">Cart</span>
+                </a>
+                <a href="/profile" title="Profile">
+                    <CgProfile /> <span className="icon-label">Profile</span>
+                </a>
+            </div>
+        </div>
+    );
+};
+
+export default Navbar;

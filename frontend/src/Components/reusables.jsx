@@ -110,7 +110,7 @@ export const Input = styled.input`
   margin: 8px 0;
   width: 100%;
   font-size: 14px;
-  color: #fff;
+  color:rgb(9, 9, 9);
   transition: all 0.3s ease-in-out;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
