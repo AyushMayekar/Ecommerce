@@ -165,7 +165,7 @@ CSRF_COOKIE_SECURE = True
 # SENDGRID Settings
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
-FRONTEND_RESET_PASSWORD_URL = "http://localhost:5173/reset-password"  # your Vite reset password page
+FRONTEND_RESET_PASSWORD_URL = "http://localhost:5173/reset_password"  # your Vite reset password page
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587

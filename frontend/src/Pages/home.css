@@ -74,7 +74,7 @@ body {
     padding: 0.9rem 2rem;
     border: none;
     border-radius: 30px;
-    background: linear-gradient(135deg, #003366, #00336671);
+    background: linear-gradient(135deg, rgb(0, 51, 102), #00336671);
     color: white;
     font-size: 1.1rem;
     cursor: pointer;
@@ -330,4 +330,58 @@ body {
     .product-heading p {
         font-size: 1rem;
     }
+}
+
+.filter-container {
+    position: relative;
+    display: inline-block;
+}
+
+.filter-toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-icon {
+    font-size: 36px;        /* 🔥 Size (change to 20px, 30px, etc.) */
+    color: rgb(0, 51, 120);            /* 🎨 Color — can be any hex, rgb, or named color */
+    margin-left: 10px;      /* 📦 Position - tweak margins to move it */
+    transition: 0.3s ease;  /* ✨ Optional hover animation */
+    margin-top: 10px;
+    margin-right: 12px;
+}
+
+.filter-icon:hover {
+    color: rgba(255, 255, 255, 0.495);            /* Change color on hover if needed */
+}
+
+.filter-dropdown {
+    position: absolute;
+    top: 40px;
+    background: rgb(0, 51, 120);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+    margin-top: 16px;
+    margin-left: 1px;
+}
+
+.filter-dropdown input {
+    padding: 5px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    background-color: rgb(0, 51, 120);
+}
+
+.filter-dropdown input::placeholder {
+    color: #fff;
 }

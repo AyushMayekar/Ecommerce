@@ -58,7 +58,7 @@ class ForgotPasswordView(APIView):
         message = f"Click here to reset your password: {reset_link}"
         try:
             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
-            return Response({"message": "Reset link sent to email"})
+            return Response({"message": "Reset link sent to email!!"})
         except Exception as e:
             return Response({"error": str(e)}, status=500) 
 

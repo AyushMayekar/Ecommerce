@@ -19,12 +19,12 @@ function AppWrapper() {
 
   useEffect(() => {
     // Add login background class ONLY on auth routes
-    const authRoutes = ['/user_auth', '/'];
+    const authRoutes = ['/user_auth', '/', '/forgot_password', '/reset_password'];
     const isAuthRoute = authRoutes.includes(location.pathname);
     document.body.classList.toggle('login-background', isAuthRoute);
   }, [location]);
 
-  const isAuthRoute = ['/user_auth','/'].includes(location.pathname);
+  const isAuthRoute = ['/user_auth', '/', '/forgot_password', '/reset_password'].includes(location.pathname);
 
   return (
     <div className="app">

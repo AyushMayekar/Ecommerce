@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function ResetPassword() {
     const [newPassword, setNewPassword] = useState('');
@@ -25,12 +26,13 @@ export default function ResetPassword() {
         }
 
         try {
-            const response = await axios.post('/api/reset-password/', {
+            const response = await axios.post('http://127.0.0.1:8000/reset_password', {
                 token,
-                new_password: newPassword
+                new_password: newPassword,
+                confirm_password : confirmPassword
             });
             setMessage(response.data.message);
-            setTimeout(() => navigate('/login'), 2000);
+            setTimeout(() => navigate('/user_auth'), 2000);
         } catch (err) {
             setError(err.response?.data?.error || 'Something went wrong');
         }
@@ -52,7 +54,7 @@ export default function ResetPassword() {
                         required
                     />
                     <span onClick={() => setShowNew(!showNew)} style={styles.eye}>
-                        {showNew ? '🙈' : '👁️'}
+                        {showNew ? <FaEye /> : <FaEyeSlash />}
                     </span>
                 </div>
 
@@ -66,7 +68,7 @@ export default function ResetPassword() {
                         required
                     />
                     <span onClick={() => setShowConfirm(!showConfirm)} style={styles.eye}>
-                        {showConfirm ? '🙈' : '👁️'}
+                        {showConfirm ? <FaEye /> : <FaEyeSlash />}
                     </span>
                 </div>
 

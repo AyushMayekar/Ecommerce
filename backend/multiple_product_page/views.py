@@ -13,8 +13,8 @@ db = client["EagleHub"]
 products_collection = db["Products"]
 
 class MultipleProductPageView(APIView):
-    authentication_classes = [MongoDBJWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [MongoDBJWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request):
         # Extract filters from query params
@@ -46,4 +46,3 @@ class MultipleProductPageView(APIView):
         cache.set(cache_key, products, timeout=300)
 
         return Response(products, status=status.HTTP_200_OK)
-

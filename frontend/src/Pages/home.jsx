@@ -1,18 +1,15 @@
 // src/pages/HomePage.jsx
 import React, { useState, useEffect } from "react";
+import { ensureAuthenticated } from "../utils/authUtils";
 import { useNavigate } from "react-router-dom";
 import "./home.css";
 import { BiSearchAlt } from "react-icons/bi";
-
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { IoFilter } from "react-icons/io5";
 import OfferBanner1 from "../assets/offerBanner1.jpg";
 import OfferBanner2 from "../assets/offerBanner2.jpg";
 import OfferBanner3 from "../assets/offerBanner3.jpg";
-
-import SmartwatchImage from "../assets/smartwatch.jpg";
-import EarbudsImage from "../assets/earbuds.jpg";
-import BackpackImage from "../assets/backpack.jpg";
-import LEDLampImage from "../assets/ledlamp.jpg";
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -38,33 +35,12 @@ const HomePage = () => {
         },
     ];
 
-    const products = [
-        {
-            id: "smart-watch",
-            name: "Smart Watch",
-            image: SmartwatchImage,
-            description: "Stylish, sleek and affordable. Grab the latest smart wearable!",
-        },
-        {
-            id: "wireless-earbuds",
-            name: "Wireless Earbuds",
-            image: EarbudsImage,
-            description: "Enjoy crystal-clear sound and long battery life on the go.",
-        },
-        {
-            id: "laptop-backpack",
-            name: "Laptop Backpack",
-            image: BackpackImage,
-            description: "Spacious, durable, and water-resistant backpack for professionals.",
-        },
-        {
-            id: "led-lamp",
-            name: "LED Lamp",
-            image: LEDLampImage,
-            description: "Elegant desk lamp with touch control and adjustable brightness.",
-        },
-    ];
-
+    const [products, setProducts] = useState([]);
+    const [showFilters, setShowFilters] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [category, setCategory] = useState("");
+    const [priceMin, setPriceMin] = useState("");
+    const [priceMax, setPriceMax] = useState("");
     const [currentOfferIndex, setCurrentOfferIndex] = useState(0);
     const [fade, setFade] = useState(true);
 
@@ -79,12 +55,72 @@ const HomePage = () => {
         return () => clearInterval(interval);
     }, [offers.length]);
 
-    const handleOfferClick = () => {
-        navigate(offers[currentOfferIndex].link);
+    const handleSearch = async () => {
+        // const isAuth = await ensureAuthenticated();
+        // if (!isAuth) return navigate("/user_auth");
+        let query = [];
+        const trimmedSearch = searchQuery.trim();
+        const isSearchPresent = !!trimmedSearch;
+        const isCategoryPresent = !!category.trim();
+        const isPriceRangePresent = !!priceMin.trim() && !!priceMax.trim();
+
+        if (!isSearchPresent && !isCategoryPresent && !isPriceRangePresent) {
+            toast.warn("Please enter a search term or select filters.");
+            return;
+        }
+
+        if (isSearchPresent) query.push(`search=${encodeURIComponent(trimmedSearch)}`);
+        if (isCategoryPresent) query.push(`category=${encodeURIComponent(category.trim())}`);
+        if (isPriceRangePresent) {
+            query.push(`price_min=${priceMin.trim()}`);
+            query.push(`price_max=${priceMax.trim()}`);
+        }
+        const queryString = query.join("&");
+        try {
+            const res = await fetch(`http://127.0.0.1:8000/search?${queryString}`, {
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            if (!res.ok) throw new Error("No products found");
+
+            const data = await res.json();
+            if (!data || data.length === 0) {
+                toast.info("No matching products found.");
+            }
+            setProducts(data);
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to fetch products.");
+            setProducts([]);
+        }
     };
 
-    const handleProductClick = (id) => {
-        navigate(`/product/${id}`);
+    const handleOfferClick = async () => {
+        // const isAuth = await ensureAuthenticated();
+        // if (!isAuth) return navigate("/user_auth");
+        try {
+            const res = await fetch(`http://127.0.0.1:8000/search?category=combo`, {
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!res.ok) throw new Error("No combo products found");
+
+            const data = await res.json();
+            if (!data || data.length === 0) {
+                toast.info("No combo products found.");
+            }
+
+            setProducts(data);
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to fetch combo products.");
+            setProducts([]);
+        }
     };
 
     return (
@@ -92,14 +128,55 @@ const HomePage = () => {
             <div className="home-container">
                 <div className="home-content">
                     <div className="search-bar-wrapper">
+                        <div className="filter-container">
+                            <button
+                                className="filter-toggle-btn"
+                                onClick={() => setShowFilters((prev) => !prev)}
+                            >
+                                <IoFilter className="filter-icon" />
+                            </button>
+
+                            {showFilters && (
+                                <div className="filter-dropdown">
+                                    <input
+                                        type="text"
+                                        placeholder="Category"
+                                        value={category}
+                                        onChange={(e) => setCategory(e.target.value)}
+                                    />
+                                    <input
+                                        type="number"
+                                        placeholder="Min Price"
+                                        value={priceMin}
+                                        onChange={(e) => setPriceMin(e.target.value)}
+                                    />
+                                    <input
+                                        type="number"
+                                        placeholder="Max Price"
+                                        value={priceMax}
+                                        onChange={(e) => setPriceMax(e.target.value)}
+                                    />
+                                </div>
+                            )}
+                        </div>
                         <div className="search-container">
                             <input
                                 type="text"
                                 placeholder="Search products..."
                                 className="search-input"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") handleSearch();
+                                }}
                             />
-                            <button className="search-btn"><BiSearchAlt />
-</button>
+                            <button
+                                className="search-btn"
+                                onClick={() => {
+                                    if (searchQuery.trim()) handleSearch(searchQuery.trim());
+                                }}
+                            ><BiSearchAlt />
+                            </button>
                         </div>
                     </div>
 
@@ -151,19 +228,21 @@ const HomePage = () => {
                         </div>
                         {products.map((prod) => (
                             <div
-                                key={prod.id}
+                                key={prod.sku}
                                 className="product-card"
-                                onClick={() => handleProductClick(prod.id)}
+                                onClick={() => navigate(`/product/${prod.sku}`, { state: { ...prod }, })}
                                 style={{ cursor: "pointer" }}
                             >
-                                <img src={prod.image} alt={prod.name} />
+                                <img src={prod.image_urls[0]} alt={prod.name} />
                                 <h3>{prod.name}</h3>
                                 <p>{prod.description}</p>
+                                <p>₹{prod.mrp}</p>
                             </div>
                         ))}
                     </div>
                 </div>
             </div>
+            <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
         </div>
     );
 };
