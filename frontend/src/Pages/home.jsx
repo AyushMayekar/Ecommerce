@@ -98,8 +98,8 @@ const HomePage = () => {
     };
 
     const handleOfferClick = async () => {
-        // const isAuth = await ensureAuthenticated();
-        // if (!isAuth) return navigate("/user_auth");
+        const isAuth = await ensureAuthenticated();
+        if (!isAuth) return navigate("/user_auth");
         try {
             const res = await fetch(`http://127.0.0.1:8000/search?category=combo`, {
                 credentials: "include",

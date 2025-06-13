@@ -18,13 +18,17 @@ razorpay_client = razorpay.Client(auth=(settings.TEST_KEY_ID, settings.TEST_KEY_
 
 #  Create order View
 class CreateRazorpayOrder(APIView):
-    authentication_classes = [MongoDBJWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [MongoDBJWTAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     def post(self, request):
         user = request.user
-        amount = request.data.get("amount")
-        amount_paise = int(float(amount) * 100)
+        order_items = request.data.get('order_items', [])
+        shipping_info = request.data.get('shipping_info', {})
+        payment_method = request.data.get('payment_method', '')
+        subtotal = request.data.get('subtotal', 0)
+        total_quantity = request.data.get('total_quantity', 0)
+        amount_paise = int(float(subtotal) * 100)
         currency = "INR"
         receipt_id = f"{user.username}_{uuid.uuid4().hex[:8]}"
 
@@ -40,9 +44,13 @@ class CreateRazorpayOrder(APIView):
         order_record = {
             "user": user.username,
             "razorpay_order_id": razorpay_order["id"],
-            "amount": amount,
+            "subtotal": subtotal,
+            "total_quantity": total_quantity,
+            "payment_method": payment_method,
             "payment_status": "PENDING",
             "created_at": datetime.utcnow(),
+            "order_items": order_items,
+            "shipping_info": shipping_info,
         }
         orders_collection.insert_one(order_record)
 
@@ -52,12 +60,12 @@ class CreateRazorpayOrder(APIView):
             "currency": razorpay_order["currency"],
             "receipt": receipt_id,
             "key": settings.TEST_KEY_ID,
-        })
+        }, status=200)
 
 # Verify payment View
 class VerifyPaymentView(APIView):
-    authentication_classes = [MongoDBJWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [MongoDBJWTAuthentication]
+    # permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
             # Extract details from request

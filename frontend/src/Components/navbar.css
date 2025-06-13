@@ -7,7 +7,7 @@
     /* ✅ Ensures no overlap with scroll */
     height: 65px;
     background: linear-gradient(90deg, #0033668c, #003366c1, #003366);
-    color: white;
+    color: azure;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -32,7 +32,7 @@
 }
 
 .hub-highlight {
-    color: #fdfdfb;
+    color: azure;
     font-weight: 900;
     margin-left: 2px;
 }
@@ -44,7 +44,7 @@
 }
 
 .navbar-links a {
-    color: #fff;
+    color: azure;
     font-weight: 500;
     font-size: 1rem;
     text-decoration: none;
@@ -81,7 +81,7 @@
 }
 
 .navbar-icons a {
-    color: white;
+    color: azure;
     text-decoration: none;
     display: flex;
     align-items: center;

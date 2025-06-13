@@ -1,0 +1,107 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.success-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to right, #f0fff0, #e0f7fa);
+    padding-top: 65px;
+    padding-bottom: 50px;
+}
+
+.success-box {
+    background: #ffffff;
+    border-radius: 15px;
+    padding-top: 65px;
+    padding-bottom: 50px;
+    /* max-width: 600px; */
+    /* width: 100%; */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    overflow-y: auto;
+}
+
+.success-icon {
+    display: inline-block;
+    margin-bottom: 1px;
+    animation: pop 0.5s ease-in-out;
+}
+
+.checkmark-icon {
+    color: #4caf50;
+    font-size: 150px; /* matches your previous size */
+}
+
+
+@keyframes scale-in {
+    from {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.success-title {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.success-message {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 2rem;
+    margin-left: 15px;
+    margin-right: 15px;
+    line-height: 1.6;
+}
+
+.success-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.success-btn {
+    padding: 0.75rem 1.5rem;
+    background: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.success-btn:hover {
+    background: #43a047;
+}
+
+.success-btn-outline {
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    color: #4caf50;
+    border: 2px solid #4caf50;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.success-btn-outline:hover {
+    background: #e8f5e9;
+}

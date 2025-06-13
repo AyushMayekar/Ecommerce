@@ -32,17 +32,7 @@ class MultipleProductPageView(APIView):
         if search:
             query_filter["name"] = {"$regex": search, "$options": "i"}  # Case-insensitive search
 
-        # Use cache key based on filters
-        cache_key = f"products:{category}:{price_min}:{price_max}:{search}"
-        cached_data = cache.get(cache_key)
-
-        if cached_data:
-            return Response(cached_data, status=status.HTTP_200_OK)
-
         # If not in cache, query MongoDB
         products = list(products_collection.find(query_filter, {"_id": 0}))
-
-        # Store in cache for 5 minutes (300 seconds)
-        cache.set(cache_key, products, timeout=300)
 
         return Response(products, status=status.HTTP_200_OK)

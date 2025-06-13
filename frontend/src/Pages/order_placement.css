@@ -1,0 +1,161 @@
+/* src/pages/BuyNow.css */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.buy_now-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    padding-top: 65px;
+    padding-bottom: 50px;
+}
+
+.buy-now-page {
+    flex: 1;
+    padding-top: 65px;
+    padding-bottom: 50px;
+    overflow-y: auto;
+    background: linear-gradient(to right, #f8f9fa, #e9eff5);
+    font-family: 'Segoe UI', sans-serif;
+    margin-bottom: 10px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #003366;
+    font-size: 2.5rem;
+    margin-top: 1px;
+}
+
+.checkout-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.left-section,
+.right-section {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.653);
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.product-summary {
+    margin-bottom: 2rem;
+}
+
+.product-item img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 0.5rem;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+}
+
+.product-item p {
+    margin: 0.3rem 0;
+    font-size: 1rem;
+}
+
+.shipping-details input,
+.order-summary input[type="text"] {
+    width: 100%;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    transition: border 0.3s;
+}
+
+.shipping-details input:focus,
+.order-summary input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.payment-method label {
+    display: block;
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.order-summary {
+    background: #f4f6f9;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #e0e0e0;
+}
+
+.order-summary h3 {
+    margin-bottom: 1rem;
+    color: #003366;
+    font-size: 1.3rem;
+}
+
+.order-summary hr {
+    margin: 1rem 0;
+}
+
+.free-text {
+    color: green;
+    font-weight: bold;
+}
+
+.apply-code-btn {
+    margin-top: 0.7rem;
+    background: linear-gradient(to right, #003366, #003366c1, #0033668c);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0.75rem 1.2rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 85, 170, 0.2);
+}
+
+.apply-code-btn:hover {
+    background: linear-gradient(to right, #0033668c, #003366c1, #003366);
+    box-shadow: 0 6px 16px rgba(0, 70, 140, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Place Order Button */
+.place-order-btn {
+    width: 100%;
+    padding: 1.1rem;
+    background: linear-gradient(135deg, #003366, #003366c1, #0033668c);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.15rem;
+    border: none;
+    border-radius: 14px;
+    margin-top: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 6px 18px rgba(0, 51, 102, 0.3);
+}
+
+.place-order-btn:hover {
+    background: linear-gradient(135deg, #0033668c, #003366c1, #003366);
+    box-shadow: 0 8px 24px rgba(0, 51, 102, 0.4);
+    transform: translateY(-2px);
+}
