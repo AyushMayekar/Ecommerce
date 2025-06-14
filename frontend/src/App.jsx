@@ -67,10 +67,10 @@ function AppWrapper() {
 /* 🔁 Top-level router */
 function App() {
   return (
-    <Router>
+    <>
       <ToastContainer position="top-center" autoClose={3000} />
       <AppWrapper />
-    </Router>
+    </>
   );
 }
 

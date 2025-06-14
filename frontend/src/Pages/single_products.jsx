@@ -66,8 +66,8 @@ const ProductPage = () => {
                     unitPrice,
                     size: selectedSize,
                     colors: selectedColor
-                }), 
-                credentials: "include",});
+                })
+            });
 
             const data = await response.json();
 
