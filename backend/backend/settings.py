@@ -153,11 +153,12 @@ TEST_KEY_ID = os.getenv('TEST_KEY_ID')
 # CORS settings
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "eaglehub.onrender.com",  
+    "eaglehub.onrender.com",
+    "https://eaglehub.in",  
 ]
 
 # CSRF settings
-CSRF_TRUSTED_ORIGINS = ['eaglehub.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['eaglehub.onrender.com', 'https://eaglehub.in']
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SECURE = True
