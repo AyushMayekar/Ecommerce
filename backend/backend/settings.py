@@ -153,11 +153,11 @@ TEST_KEY_ID = os.getenv('TEST_KEY_ID')
 # CORS settings
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "https://eaglehub.in",  
+    "eaglehub.onrender.com",  
 ]
 
 # CSRF settings
-CSRF_TRUSTED_ORIGINS = ['https://eaglehub.in']
+CSRF_TRUSTED_ORIGINS = ['eaglehub.onrender.com']
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SECURE = True
@@ -165,7 +165,7 @@ CSRF_COOKIE_SECURE = True
 # SENDGRID Settings
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
-FRONTEND_RESET_PASSWORD_URL = "https://eaglehub.in/reset_password"  # your Vite reset password page
+FRONTEND_RESET_PASSWORD_URL = "https://eaglehub.onrender.com/reset_password"  # your Vite reset password page
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
