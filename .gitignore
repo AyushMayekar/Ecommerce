@@ -87,7 +87,6 @@ coverage.xml
 /frontend/.env
 /frontend/.env.*  # Vercel, Netlify env files
 /frontend/build/
-/frontend/dist/
 /frontend/.next/   # Next.js if you use it later
 
 # React Testing
