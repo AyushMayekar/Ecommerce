@@ -7,15 +7,15 @@ import { ensureAuthenticated } from "../utils/authUtils";
 const MyOrders = () => {
     const [orders, setOrders] = useState([]);
 
-    // useEffect(() => {
-    //     const checkAuth = async () => {
-    //         const isAuth = await ensureAuthenticated();
-    //         if (!isAuth) {
-    //             navigate("/user_auth");
-    //         }
-    //     };
-    //     checkAuth();
-    // }, []);
+    useEffect(() => {
+        const checkAuth = async () => {
+            const isAuth = await ensureAuthenticated();
+            if (!isAuth) {
+                navigate("/user_auth");
+            }
+        };
+        checkAuth();
+    }, []);
 
     useEffect(() => {
         const storedOrders = JSON.parse(localStorage.getItem("orders")) || [];

@@ -31,7 +31,7 @@ const ProductPage = () => {
     useEffect(() => {
         const fetchRecommended = async () => {
             try {
-                const res = await fetch(`http://127.0.0.1:8000/search?category=${product.category}`);
+                const res = await fetch(`https://eaglehub.onrender.com/search?category=${product.category}`, {credentials: "include",});
                 const data = await res.json();
                 setRecommended(data.filter(p => p.sku !== product.sku));
             } catch (err) {
@@ -53,7 +53,7 @@ const ProductPage = () => {
         // const isAuth = await ensureAuthenticated();
         // if (!isAuth) return navigate("/user_auth");
         try {
-            const response = await fetch("http://localhost:8000/add_to_cart", {
+            const response = await fetch("https://eaglehub.onrender.com/add_to_cart", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -66,8 +66,8 @@ const ProductPage = () => {
                     unitPrice,
                     size: selectedSize,
                     colors: selectedColor
-                })
-            });
+                }), 
+                credentials: "include",});
 
             const data = await response.json();
 

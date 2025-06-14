@@ -49,7 +49,7 @@ const LandingPage = () => {
     const handleGetStarted = async () => {
         try {
             // Step 1: Check if access token is valid
-            const res = await fetch("http://127.0.0.1:8000/check_auth", {
+            const res = await fetch("https://eaglehub.onrender.com/check_auth", {
                 method: "GET",
                 credentials: "include", // sends cookies
             });
@@ -59,7 +59,7 @@ const LandingPage = () => {
                 navigate("/home");
             } else if (res.status === 401) {
                 // Step 2: Try refreshing the access token
-                const refreshRes = await fetch("http://127.0.0.1:8000/refresh", {
+                const refreshRes = await fetch("https://eaglehub.onrender.com/refresh", {
                     method: "POST",
                     credentials: "include",
                 });

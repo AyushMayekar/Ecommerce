@@ -25,15 +25,15 @@ const BuyNow = () => {
     });
     const [paymentMethod, setPaymentMethod] = useState("Online Payment Options");
 
-    // useEffect(() => {
-    //     const checkAuth = async () => {
-    //         const isAuth = await ensureAuthenticated();
-    //         if (!isAuth) {
-    //             navigate("/user_auth");
-    //         }
-    //     };
-    //     checkAuth();
-    // }, []);
+    useEffect(() => {
+        const checkAuth = async () => {
+            const isAuth = await ensureAuthenticated();
+            if (!isAuth) {
+                navigate("/user_auth");
+            }
+        };
+        checkAuth();
+    }, []);
 
     useEffect(() => {
         const data = orderItems.length > 0 ? orderItems : [location.state];
@@ -76,7 +76,7 @@ const BuyNow = () => {
 
         if (paymentMethod === "Cash On Delivery") {
             try {
-                const res = await axios.post("http://127.0.0.1:8000/create_order", orderPayload, { withCredentials: true });
+                const res = await axios.post("https://eaglehub.onrender.com/create_order", orderPayload, { withCredentials: true });
                 if (res.status === 200) {
                     Swal.fire("Order Placed", "Cash on Delivery confirmed!", "success");
                     navigate("/success");
@@ -86,7 +86,7 @@ const BuyNow = () => {
             }
         } else {
             try {
-                const res = await axios.post("http://127.0.0.1:8000/create_order", orderPayload, { withCredentials: true });
+                const res = await axios.post("https://eaglehub.onrender.com/create_order", orderPayload, { withCredentials: true });
                 const { order_id, amount, key } = res.data;
                 const options = {
                     key,
@@ -97,7 +97,7 @@ const BuyNow = () => {
                     order_id,
                     handler: async function (response) {
                         try {
-                            await axios.post("http://127.0.0.1:8000/verify_payment", {
+                            await axios.post("https://eaglehub.onrender.com/verify_payment", {
                                 razorpay_order_id: response.razorpay_order_id,
                                 razorpay_payment_id: response.razorpay_payment_id,
                                 razorpay_signature: response.razorpay_signature,

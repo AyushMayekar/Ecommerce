@@ -9,19 +9,19 @@ const CartPage = () => {
     const [cartItems, setCartItems] = useState([]);
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     const checkAuth = async () => {
-    //         const isAuth = await ensureAuthenticated();
-    //         if (!isAuth) {
-    //             navigate("/user_auth");
-    //         }
-    //     };
-    //     checkAuth();
-    // }, []);
+    useEffect(() => {
+        const checkAuth = async () => {
+            const isAuth = await ensureAuthenticated();
+            if (!isAuth) {
+                navigate("/user_auth");
+            }
+        };
+        checkAuth();
+    }, []);
 
     const fetchCart = async () => {
         try {
-            const res = await axios.get("http://127.0.0.1:8000/view_cart", {
+            const res = await axios.get("https://eaglehub.onrender.com/view_cart", {
                 withCredentials: true,
             });
             setCartItems(res.data.cart || []);
@@ -42,7 +42,7 @@ const CartPage = () => {
         const totalPrice = item.totalPrice * newQty;
         try {
             await axios.patch(
-                "http://127.0.0.1:8000/update_cart",
+                "https://eaglehub.onrender.com/update_cart",
                 { sku, quantity: newQty, totalPrice: totalPrice, },
                 { withCredentials: true }
             );
@@ -58,7 +58,7 @@ const CartPage = () => {
 
     const removeItem = async (sku) => {
         try {
-            await axios.delete("http://127.0.0.1:8000/delete_cart", {
+            await axios.delete("https://eaglehub.onrender.com/delete_cart", {
                 withCredentials: true,
                 data: { sku },
             });

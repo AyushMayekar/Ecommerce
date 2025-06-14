@@ -11,7 +11,7 @@ export default function ForgotPassword() {
         setMessage('');
         setError('');
         try {
-            const response = await axios.post('http://127.0.0.1:8000/forgot_password', { email });
+            const response = await axios.post('https://eaglehub.onrender.com/forgot_password', {email}, { withCredentials: true },);
             setMessage(response.data.message);
         } catch (err) {
             setError(err.response?.data?.error || 'Something went wrong');

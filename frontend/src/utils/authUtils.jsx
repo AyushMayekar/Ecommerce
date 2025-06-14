@@ -1,7 +1,7 @@
 // src/utils/authUtils.js
 export const ensureAuthenticated = async () => {
     try {
-        const res = await fetch("http://127.0.0.1:8000/check_auth", {
+        const res = await fetch("https://eaglehub.onrender.com/check_auth", {
             method: "GET",
             credentials: "include",
         });
@@ -11,7 +11,7 @@ export const ensureAuthenticated = async () => {
         }
 
         if (res.status === 401) {
-            const refreshRes = await fetch("http://127.0.0.1:8000/refresh", {
+            const refreshRes = await fetch("https://eaglehub.onrender.com/refresh", {
                 method: "POST",
                 credentials: "include",
             });

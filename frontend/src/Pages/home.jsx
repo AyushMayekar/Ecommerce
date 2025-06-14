@@ -56,8 +56,8 @@ const HomePage = () => {
     }, [offers.length]);
 
     const handleSearch = async () => {
-        // const isAuth = await ensureAuthenticated();
-        // if (!isAuth) return navigate("/user_auth");
+        const isAuth = await ensureAuthenticated();
+        if (!isAuth) return navigate("/user_auth");
         let query = [];
         const trimmedSearch = searchQuery.trim();
         const isSearchPresent = !!trimmedSearch;
@@ -77,7 +77,7 @@ const HomePage = () => {
         }
         const queryString = query.join("&");
         try {
-            const res = await fetch(`http://127.0.0.1:8000/search?${queryString}`, {
+            const res = await fetch(`https://eaglehub.onrender.com/search?${queryString}`, {
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
@@ -101,7 +101,7 @@ const HomePage = () => {
         const isAuth = await ensureAuthenticated();
         if (!isAuth) return navigate("/user_auth");
         try {
-            const res = await fetch(`http://127.0.0.1:8000/search?category=combo`, {
+            const res = await fetch(`https://eaglehub.onrender.com/search?category=combo`, {
                 credentials: "include",
                 headers: {
                     "Content-Type": "application/json",

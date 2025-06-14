@@ -21,15 +21,15 @@ const Profile = () => {
     const [phoneVerified, setPhoneVerified] = useState(false);
 
 
-    // useEffect(() => {
-    //     const checkAuth = async () => {
-    //         const isAuth = await ensureAuthenticated();
-    //         if (!isAuth) {
-    //             navigate("/user_auth");
-    //         }
-    //     };
-    //     checkAuth();
-    // }, []);
+    useEffect(() => {
+        const checkAuth = async () => {
+            const isAuth = await ensureAuthenticated();
+            if (!isAuth) {
+                navigate("/user_auth");
+            }
+        };
+        checkAuth();
+    }, []);
 
     useEffect(() => {
         const storedUser = JSON.parse(localStorage.getItem("userProfile"));

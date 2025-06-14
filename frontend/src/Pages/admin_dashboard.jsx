@@ -37,15 +37,15 @@ const AdminDashboard = () => {
     const [priceMax, setPriceMax] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
 
-    // useEffect(() => {
-    //     const checkAuth = async () => {
-    //         const isAuth = await ensureAuthenticated();
-    //         if (!isAuth) {
-    //             navigate("/user_auth");
-    //         }
-    //     };
-    //     checkAuth();
-    // }, []);
+    useEffect(() => {
+        const checkAuth = async () => {
+            const isAuth = await ensureAuthenticated();
+            if (!isAuth) {
+                navigate("/user_auth");
+            }
+        };
+        checkAuth();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
@@ -80,8 +80,8 @@ const AdminDashboard = () => {
     }, [showProductList]);
 
     const handleSearch = async () => {
-        // const isAuth = await ensureAuthenticated();
-        // if (!isAuth) return navigate("/user_auth");
+        const isAuth = await ensureAuthenticated();
+        if (!isAuth) return navigate("/user_auth");
         const query = new URLSearchParams();
         if (searchQuery) query.append("search", searchQuery.trim());
         if (category) query.append("category", category.trim());
@@ -89,7 +89,10 @@ const AdminDashboard = () => {
         if (priceMax) query.append("price_max", priceMax);
 
         try {
-            const res = await fetch(`http://127.0.0.1:8000/search?${query.toString()}`);
+            const res = await fetch(`https://eaglehub.onrender.com/search?${query.toString()}`, {
+                method: "GET",
+                credentials: "include",
+            });
             const data = await res.json();
             if (!data.length) toast.info("No matching products found.");
             setProducts(data);
@@ -117,9 +120,10 @@ const AdminDashboard = () => {
         });
 
         try {
-            const res = await fetch(`http://127.0.0.1:8000/add`, {
+            const res = await fetch(`https://eaglehub.onrender.com/add`, {
                 method: "POST",
                 body: data,
+                credentials:"include",
             });
             if (!res.ok) throw new Error("Failed to submit product");
             toast.success("Product added");
@@ -160,9 +164,10 @@ const AdminDashboard = () => {
         }
         // console.log(formData)
         try {
-            const res = await fetch(`http://127.0.0.1:8000/update/${editingId}`, {
+            const res = await fetch(`https://eaglehub.onrender.com/update/${editingId}`, {
                 method: "PUT",
                 body: data,
+                credentials:"include",
             });
 
             if (!res.ok) throw new Error("Update failed");
@@ -178,7 +183,9 @@ const AdminDashboard = () => {
 
     const fetchProducts = async () => {
         try {
-            const res = await fetch("http://127.0.0.1:8000/read");
+            const res = await fetch("https://eaglehub.onrender.com/read",{
+                credentials:"include",
+            });
             const data = await res.json();
             setProducts(data);
         } catch (err) {
@@ -205,7 +212,7 @@ const AdminDashboard = () => {
     const handleDelete = async (id) => {
         if (!window.confirm("Delete this product?")) return;
         try {
-            const res = await fetch(`http://127.0.0.1:8000/delete/${id}`, { method: "DELETE" });
+            const res = await fetch(`https://eaglehub.onrender.com/delete/${id}`, { method: "DELETE", credentials:"include", });
             if (!res.ok) throw new Error();
             toast.success("Deleted successfully");
             fetchProducts();
@@ -238,8 +245,9 @@ const AdminDashboard = () => {
         e.preventDefault();
         if (!couponCode || !couponDiscount) return alert("Fill in coupon details");
         try {
-            const res = await fetch("http://127.0.0.1:8000/add_coupon", {
+            const res = await fetch("https://eaglehub.onrender.com/add_coupon", {
                 method: "POST",
+                credentials:"include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ code: couponCode.toUpperCase(), discount: couponDiscount }),
             });

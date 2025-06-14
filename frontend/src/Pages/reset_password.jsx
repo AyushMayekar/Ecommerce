@@ -26,7 +26,7 @@ export default function ResetPassword() {
         }
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/reset_password', {
+            const response = await axios.post('https://eaglehub.onrender.com/reset_password', {
                 token,
                 new_password: newPassword,
                 confirm_password : confirmPassword
