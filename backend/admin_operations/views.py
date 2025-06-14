@@ -4,10 +4,10 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from user_auth.views import MongoDBJWTAuthentication
 from django.conf import settings
-from django.core.cache import cache
 import cloudinary.uploader
 import uuid
 from pymongo import MongoClient
+import hashlib
 
 # MongoDB connection
 client = MongoClient(settings.MONGODB_URL)
@@ -25,10 +25,15 @@ cloudinary.config(
 
 # Product Management API's
 # Helper to generate SKU
-def generate_sku(product_name, category):
-    code = product_name[:3].upper() + category[:3].upper()
-    uid = str(uuid.uuid4())[:6].upper()
-    return f"SKU-{code}-{uid}"
+def generate_sku(product_name, category, sizes, colors):
+    name_code = product_name[:3].upper()
+    category_code = category[:3].upper()
+    size_str = ",".join(sorted(s.upper() for s in sizes)) if sizes else "NA"
+    color_str = ",".join(sorted(c.lower() for c in colors)) if colors else "NA"
+    combo_string = f"{size_str}:{color_str}"
+    combo_hash = hashlib.md5(combo_string.encode()).hexdigest()[:6].upper()
+    uid = str(uuid.uuid4())[:4].upper()
+    return f"SKU-{name_code}-{category_code}-{combo_hash}-{uid}"
 
 # Upload to Cloudinary
 def upload_files_to_cloudinary(files, folder):
@@ -59,19 +64,32 @@ class AddProductView(APIView):
         product_name = data.get("name").strip().lower()
         category = data.get("category").strip().lower()
         quantity = int(data.get("quantity"))
-        quantity_threshold = int(data.get("quantity_threshold"))
+        try:
+            quantity_threshold = int(data.get("quantity_threshold"))
+        except ValueError:
+            quantity_threshold = 0
         description = data.get("description").strip().lower()
-        colors = data.get("colors").strip().lower()
-        mrp = float(data.get("mrp"))
-        wholesale_price = float(data.get("wholesale_price"))
+        colors = [c.strip().lower() for c in data.get("colors", "").split(",") if c.strip()]
+        size = [s.strip().upper() for s in data.get("size", "").split(",") if s.strip()]
+        try:
+            mrp = float(data.get("mrp"))
+        except ValueError:
+            mrp = 0.0
+        try:
+            wholesale_price = float(data.get("wholesale_price"))
+        except ValueError:
+            wholesale_price = 0.0
+        try:
+            gst = float(data.get("gst"))
+        except ValueError:
+            gst = 0.0
 
         # Files
         images = request.FILES.getlist("images")
         videos = request.FILES.getlist("videos")
         image_urls = upload_files_to_cloudinary(images, "product_images")
         video_urls = upload_files_to_cloudinary(videos, "product_videos")
-        sku = generate_sku(product_name, category)
-
+        sku = generate_sku(product_name, category, size, colors)
         product_doc = {
             "name": product_name,
             "category": category,
@@ -83,7 +101,9 @@ class AddProductView(APIView):
             "wholesale_price": wholesale_price,
             "image_urls": image_urls,
             "video_urls": video_urls,
-            "sku": sku
+            "sku": sku,
+            "gst" :gst,
+            "size":size
         }
 
         products_collection.insert_one(product_doc)
@@ -130,9 +150,21 @@ class UpdateProductView(APIView):
                 return Response({"error": "Invalid quantity"}, status=400)
 
         # Handle optional updates
-        for field in ["name", "category", "description", "mrp", "wholesale_price", "quantity_threshold", "colors"]:
-            if request.data.get(field):
-                updated_fields[field] = request.data.get(field)
+        numeric_fields = ["mrp", "wholesale_price", "quantity_threshold", "gst"]
+
+        for field in ["name", "category", "description", "mrp", "wholesale_price", "quantity_threshold", "colors", "size", "gst"]:
+            if field in request.data:
+                value = request.data[field]
+                if field in numeric_fields:
+                    try:
+                        value = float(value)
+                    except ValueError:
+                        return Response({"error": f"Invalid value for {field}"}, status=400)
+                elif field == "colors":
+                    value = [c.strip().lower() for c in value.split(",") if c.strip()]
+                elif field == "size":
+                    value = [s.strip().upper() for s in value.split(",") if s.strip()]
+            updated_fields[field] = value
 
         # Handle media uploads
         if request.FILES.getlist("images"):
@@ -180,23 +212,12 @@ class ReadProductView(APIView):
                 price_filter["$gte"] = float(price_min)
             if price_max:
                 price_filter["$lte"] = float(price_max)
-            query_filter["price"] = price_filter
+            query_filter["mrp"] = price_filter
 
         if search:
             query_filter["name"] = {"$regex": search, "$options": "i"}
 
-        # Use cache key based on filters
-        cache_key = f"products:{category}:{price_min}:{price_max}:{search}"
-        cached_data = cache.get(cache_key)
-
-        if cached_data:
-            return Response(cached_data, status=status.HTTP_200_OK)
-
-        # If not in cache, query MongoDB
         products = list(products_collection.find(query_filter, {"_id": 0}))
-
-        # Store in cache for 5 minutes (300 seconds)
-        cache.set(cache_key, products, timeout=300)
 
         return Response(products, status=status.HTTP_200_OK)    
 

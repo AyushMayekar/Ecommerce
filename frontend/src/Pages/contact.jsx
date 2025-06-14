@@ -1,89 +1,65 @@
-const Contact = () => {
+// src/pages/ContactUs.jsx
+import React from "react";
+import "./contact.css";
+
+const ContactUs = () => {
     return (
-        <div style={{
-            maxWidth: '800px',
-            margin: '0 auto',
-            padding: '2rem',
-            background: '#f8f9fa',
-            borderRadius: '12px',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-            color: '#333'
-        }}>
-            <h1 style={{
-                textAlign: 'center',
-                fontSize: '2rem',
-                fontWeight: '700',
-                marginBottom: '1.5rem',
-                color: '#2c3e50'
-            }}>
-                Contact Us
-            </h1>
+        <div className="contact-page">
+            <div className="contact-banner">
+                <div className="banner-overlay">
+                    <h1 className="contact-title">Contact Us</h1>
 
-            <div style={{
-                background: 'white',
-                padding: '1.5rem',
-                borderRadius: '8px',
-                marginBottom: '2rem',
-                boxShadow: '0 1px 4px rgba(0,0,0,0.05)'
-            }}>
-                <h2 style={{
-                    fontSize: '1.5rem',
-                    marginBottom: '1rem',
-                    color: '#3498db'
-                }}>
-                    Customer Support
-                </h2>
-                <p style={{ marginBottom: '0.8rem' }}>
-                    <strong>Email:</strong> eaglehub879@eaglehub.in<br />
-                    <strong>Phone:</strong> +91-7208652975<br />
-                    <strong>WhatsApp:</strong> +91-7208652975<br />
-                    <strong>Hours:</strong> 9:00 AM – 8:00 PM, Monday to Saturday
-                </p>
-            </div>
+                    <div className="query-box">
+                        About Your Queries – <span>Connect With Us Directly!!</span>
+                    </div>
 
-            <div style={{
-                background: '#e8f4fd',
-                padding: '1.5rem',
-                borderRadius: '8px',
-                marginBottom: '2rem',
-                boxShadow: '0 1px 4px rgba(0,0,0,0.05)'
-            }}>
-                <h2 style={{
-                    fontSize: '1.5rem',
-                    marginBottom: '1rem',
-                    color: '#e67e22'
-                }}>
-                    Office Address
-                </h2>
-                <p style={{ marginBottom: '0.8rem' }}>
-                    <strong>Headquarters:</strong><br />
-                    Eagle Hub E-Commerce Pvt. Ltd.<br />
-                    Parnaka, Vasai(W) - 401201<br />
-                    India
-                </p>
-            </div>
+                    <p className="intro-text">
+                        We’re here to help! Reach out to us anytime. Whether it's a query,
+                        feedback, or just a hello — we'd love to connect.
+                    </p>
 
-            <div style={{
-                background: '#f5f5f5',
-                padding: '1.5rem',
-                borderRadius: '8px',
-                boxShadow: '0 1px 4px rgba(0,0,0,0.05)'
-            }}>
-                <h2 style={{
-                    fontSize: '1.5rem',
-                    marginBottom: '1rem',
-                    color: '#9b59b6'
-                }}>
-                    Social Media
-                </h2>
-                <p style={{ marginBottom: '0.8rem' }}>
-                    <strong>Instagram:</strong> @EagleHub<br />
-                    <strong>Facebook:</strong> facebook.com/EagleHubofficial<br />
-                    <strong>Twitter:</strong> @EagleHubofficial
-                </p>
+                    <div className="contact-info-box">
+                        <div className="contact-item">
+                            <h3>📧 Email</h3>
+                            <p>eaglehub879@gmail.com</p>
+                        </div>
+
+                        <div className="contact-item">
+                            <h3>📞 Phone</h3>
+                            <p>7775878789</p>
+                        </div>
+
+                        <div className="contact-item">
+                            <h3>📍 Address</h3>
+                            <p>Vasai-West, Palghar, Maharashtra.</p>
+                        </div>
+
+                        <div className="contact-item">
+                            <h3>🌐 Social Media</h3>
+                            <div className="social-links-text">
+                                <p>
+                                    Instagram:{" "}
+                                    <a
+                                        href="https://www.instagram.com/eaglehub879?igsh=MTVyY3Nwc2NsdDRnYQ=="
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        eaglehub879
+                                    </a>
+                                </p>
+                                <p>
+                                    Facebook:{" "}
+                                    <a href="https://facebook.com" target="_blank" rel="noreferrer">
+                                        Visit Facebook
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
 };
 
-export default Contact;
+export default ContactUs;

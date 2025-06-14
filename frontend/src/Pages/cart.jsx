@@ -25,6 +25,7 @@ const CartPage = () => {
                 withCredentials: true,
             });
             setCartItems(res.data.cart || []);
+            // console.log("Fetched Cart Items:", res.data.cart)
         } catch (err) {
             console.error("Failed to fetch cart:", err);
         }
@@ -38,7 +39,7 @@ const CartPage = () => {
         const item = cartItems.find(i => i.sku === sku);
         if (!item) return;
 
-        const totalPrice = item.mrp * newQty;
+        const totalPrice = item.totalPrice * newQty;
         try {
             await axios.patch(
                 "http://127.0.0.1:8000/update_cart",
@@ -70,18 +71,18 @@ const CartPage = () => {
 
     const getTotals = () => {
         const subtotal = cartItems.reduce(
-            (sum, item) => sum + item.mrp * item.quantity,
+            (sum, item) => sum + item.totalPrice * item.quantity,
             0
         );
         const gst = subtotal * 0.05;
         const totalQty = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-        return { subtotal, gst, total: subtotal + gst, totalQty };
+        return { subtotal, gst, total: subtotal, totalQty };
     };
 
     const handlePlaceOrder = () => {
         const updatedItems = cartItems.map(item => ({
             ...item,
-            price: item.mrp,
+            price: item.unitPrice,
         }));
         navigate("/buy_now", { state: { items: updatedItems } });
     };
@@ -113,8 +114,8 @@ const CartPage = () => {
                                         {item.colors && (
                                             <p>Color: {item.colors}</p>
                                         )}
-                                        <p>Price: ₹{item.mrp}</p>
-                                        <p>Total: ₹{item.mrp * item.quantity}</p>
+                                        <p>Price: ₹{item.unitPrice}</p>
+                                        <p>Total: ₹{item.unitPrice * item.quantity}</p>
                                         <div className="quantity-controls">
                                             <button
                                                 onClick={() =>
@@ -144,8 +145,7 @@ const CartPage = () => {
                             <div className="summary-box">
                                 <h2>Total Summary</h2>
                                 <p className="summary-line">Total Quantity: {totalQty}</p>
-                                <p className="summary-line">Subtotal: ₹{subtotal.toFixed(2)}</p>
-                                <p className="summary-line">GST (5%): ₹{gst.toFixed(2)}</p>
+                                <p className="summary-line">GST (5%)</p>
                                 <p className="total-amount">Total: ₹{total.toFixed(2)}</p>
                                 <button className="order-btn" onClick={handlePlaceOrder}>
                                     Place Order

@@ -202,7 +202,7 @@ class LoginView(APIView):
             access_token = jwt.encode(access_payload, SECRET_KEY, algorithm="HS256")
             refresh_token = jwt.encode(refresh_payload, SECRET_KEY, algorithm="HS256")
 
-            response = Response({"message": "Login successful"}, status=200)
+            response = Response({"message": "Login successful", "user_role": user.get("user_role", "user")}, status=200)
             response.set_cookie(
                 "access_token",
                 access_token,

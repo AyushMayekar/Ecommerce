@@ -17,11 +17,16 @@ const ProductPage = () => {
     const [recommended, setRecommended] = useState([]);
     const [selectedSize, setSelectedSize] = useState(Array.isArray(product?.sizes) && product.sizes.length > 0 ? "" : null);
     const media = [...(product.image_urls || []), ...(product.video_urls || [])];
-    const unitPrice = hasWholesale && quantity >= product.quantity_threshold
+    const parsedGst = parseFloat(product.gst) || 0;
+    const baseUnitPrice = hasWholesale && quantity >= product.quantity_threshold
         ? product.wholesale_price
         : product.mrp;
+    const unitPrice = baseUnitPrice * (1 + parsedGst / 100);
     const totalPrice = unitPrice * quantity;
-    const inStock = product.quantity > 0;
+    const inStock = product.quantity > 0; const [selectedColor, setSelectedColor] = useState(
+        Array.isArray(product?.colors) && product.colors.length > 0 ? "" : null
+    );
+
 
     useEffect(() => {
         const fetchRecommended = async () => {
@@ -58,7 +63,9 @@ const ProductPage = () => {
                     sku: product.sku,
                     quantity,
                     totalPrice,
-                    size: selectedSize
+                    unitPrice,
+                    size: selectedSize,
+                    colors: selectedColor
                 })
             });
 
@@ -77,21 +84,22 @@ const ProductPage = () => {
     };
 
     const handleBuyNow = async () => {
-    const isAuth = await ensureAuthenticated();
-    if (!isAuth) return navigate("/user_auth");
-    navigate("/buy_now", {
-        state: {
-            items: [
-                {
-                    ...product,
-                    quantity: quantity,
-                    price: unitPrice,
-                    size: selectedSize
-                }
-            ]
-        }
-    });
-};
+        // const isAuth = await ensureAuthenticated();
+        // if (!isAuth) return navigate("/user_auth");
+        navigate("/buy_now", {
+            state: {
+                items: [
+                    {
+                        ...product,
+                        quantity: quantity,
+                        price: unitPrice,
+                        size: selectedSize,
+                        colors: selectedColor
+                    }
+                ]
+            }
+        });
+    };
 
 
     return (
@@ -159,7 +167,8 @@ const ProductPage = () => {
                     <div className="product-right">
                         <h1>{product.name}</h1>
                         <p><strong>SKU:</strong> {product.sku}</p>
-                        <p><strong>Colors:</strong> {product.colors}</p>
+                        <p><strong>Colors:</strong> {Array.isArray(product.colors) ? product.colors.join(", ") : "No colors available"}</p>
+                        <p><strong>Sizes:</strong> {Array.isArray(product.size) ? product.size.join(", ") : "No colors available"}</p>
                         <p className="highlight-text">{product.description}</p>
                         <p><strong>Price per unit:</strong> ₹{unitPrice}</p>
 
@@ -173,17 +182,34 @@ const ProductPage = () => {
                                 onChange={(e) => setQuantity(Number(e.target.value))}
                             />
                         </div>
-                        {Array.isArray(product?.sizes) && product.sizes.length > 0 && (
+                        {Array.isArray(product?.size) && product.size.length > 0 && (
                             <div className="size-section">
                                 <label>Select Size: </label>
                                 <select
-                                    value={selectedSize}
+                                    value={selectedSize || ""}
                                     onChange={(e) => setSelectedSize(e.target.value)}
                                 >
                                     <option value="">Select size</option>
-                                    {product.sizes.map((size, index) => (
+                                    {product.size.map((size, index) => (
                                         <option key={index} value={size}>
                                             {size}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
+
+                        {Array.isArray(product?.colors) && product.colors.length > 0 && (
+                            <div className="color-section">
+                                <label>Select Color: </label>
+                                <select
+                                    value={selectedColor || ""}
+                                    onChange={(e) => setSelectedColor(e.target.value)}
+                                >
+                                    <option value="">Select color</option>
+                                    {product.colors.map((color, index) => (
+                                        <option key={index} value={color}>
+                                            {color}
                                         </option>
                                     ))}
                                 </select>

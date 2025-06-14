@@ -13,8 +13,8 @@ db = client["EagleHub"]
 products_collection = db["Products"]
 
 class MultipleProductPageView(APIView):
-    # authentication_classes = [MongoDBJWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [MongoDBJWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         # Extract filters from query params

@@ -65,7 +65,7 @@ const BuyNow = () => {
                 price: item.price,
                 quantity: item.quantity,
                 size: item.size || null,
-                color: item.color || null,
+                colors: item.colors || null,
                 total: item.price * item.quantity,
             })),
             shipping_info: shipping,
@@ -140,7 +140,7 @@ const BuyNow = () => {
                                     <p><strong>{item.name}</strong></p>
                                     <p>Price: ₹{item.price}</p>
                                     <p>Quantity: {item.quantity}</p>
-                                    {item.color && <p>Color: {item.color}</p>}
+                                    {item.colors && <p>Color: {item.colors}</p>}
                                     {item.size && <p>Size: {item.size}</p>}
                                     <p>Total: ₹{item.price * item.quantity}</p>
                                     <hr />

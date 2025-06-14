@@ -1,129 +1,88 @@
+// src/pages/Policy.jsx
+import React from "react";
+import "./policy.css";
+
 const Policy = () => {
     return (
-        <div style={{ padding: "2rem", maxWidth: "900px", margin: "auto", lineHeight: "1.7" }}>
-            <h1>Terms and Conditions</h1>
-            <p><strong>Effective Date:</strong> 30th May, 2025 </p>
-            <hr />
+        <div className="policy-wrapper">
+            <div className="policy-heading">POLICY</div>
+            <div className="policy-card">
+                <div className="policy-scroll">
+                    <h1 className="policy-title">Privacy Policy</h1>
+                    <p className="policy-date">Last Updated: 13 June, 2025</p>
 
-            <h2>1. Use of Website</h2>
-            <p>
-                The content of this website is for general information and use only.<br />
-                Unauthorized use may result in a claim for damages and/or criminal offense.<br />
-                You must be at least 18 years of age or under the supervision of a guardian.
-            </p>
+                    <p>
+                        Welcome to <strong>EAGLEHUB</strong> (“we”, “us”, “our”, or the “Site”). This Privacy Policy explains how we collect, use, and disclose your personal information when you use our services or visit <a href="http://eaglehub.in">http://eaglehub.in</a>. By using our services, you agree to the practices described in this Privacy Policy.
+                    </p>
 
-            <h2>2. Account Registration</h2>
-            <p>
-                You agree to provide current, complete, and accurate information.<br />
-                You're responsible for maintaining account confidentiality.<br />
-                Notify us immediately of any unauthorized activity.
-            </p>
+                    <h3>1. Changes to This Privacy Policy</h3>
+                    <p>We may update this policy from time to time... Please review it regularly.</p>
 
-            <h2>3. Product Information</h2>
-            <p>
-                We strive for accuracy in displaying product details, prices, and images.<br />
-                Prices/availability may change without notice.<br />
-                Descriptions are provided in good faith but not guaranteed error-free.
-            </p>
+                    <h3>2. What Information We Collect</h3>
+                    <h4>A. Information You Provide Directly</h4>
+                    <ul>
+                        <li>Contact Information: Name, address, email, phone number</li>
+                        <li>Order Details: Billing/shipping addresses, payment info</li>
+                        <li>Account Information: Username, password, etc.</li>
+                        <li>Customer Support Data</li>
+                    </ul>
+                    <h4>B. Information We Collect Automatically</h4>
+                    <ul>
+                        <li>Device & browser info</li>
+                        <li>IP address, location data</li>
+                        <li>Interaction with site and ads</li>
+                    </ul>
 
-            <h2>4. Order Acceptance and Cancellation</h2>
-            <p>
-                We may refuse or cancel orders at our discretion.<br />
-                In case of pricing/product info errors, your order may be canceled and refunded.
-            </p>
+                    <h3>3. How We Use Your Information</h3>
+                    <ul>
+                        <li>Fulfill orders, manage accounts</li>
+                        <li>Communicate with you</li>
+                        <li>Send marketing emails</li>
+                        <li>Prevent fraud</li>
+                    </ul>
 
-            <h2>5. Shipping and Delivery</h2>
-            <p>
-                Delivery timelines are estimated and not guaranteed.<br />
-                We're not liable for third-party shipping delays/issues.
-            </p>
+                    <h3>4. Cookies and Tracking Technologies</h3>
+                    <p>Cookies help enhance experience... You can disable via browser settings.</p>
 
-            <h2>6. Returns and Refunds</h2>
-            <p>
-                Return window: 10 days from delivery (as per return policy).<br />
-                Items must be unused, in original packaging.<br />
-                Refunds post-inspection; processing time 5-10 business days.
-            </p>
+                    <h3>5. How We Share Your Information</h3>
+                    <ul>
+                        <li>Service providers, shipping partners</li>
+                        <li>Marketing/ad partners</li>
+                        <li>Affiliates in Nirvay International</li>
+                        <li>Legal authorities or during sale</li>
+                    </ul>
 
-            <h2>7. User Conduct</h2>
-            <p>
-                You agree not to:<br />
-                - Use the site unlawfully<br />
-                - Disrupt platform functionality<br />
-                - Transmit viruses/spam/malware
-            </p>
+                    <h3>6. User-Generated Content</h3>
+                    <p>Public reviews are visible to others. We are not responsible for public info.</p>
 
-            <h2>8. Intellectual Property</h2>
-            <p>
-                All site content is property of [Your Company Name] and protected under copyright laws.
-            </p>
+                    <h3>7. Third-Party Links</h3>
+                    <p>We may link to other sites. We are not responsible for their privacy policies.</p>
 
-            <h2>9. Limitation of Liability</h2>
-            <p>
-                We are not liable for direct/indirect/incidental damages from site or product use.
-            </p>
+                    <h3>8. Children's Privacy</h3>
+                    <p>Not intended for children under 16. Contact us to delete any such data.</p>
 
-            <h2>10. Governing Law</h2>
-            <p>
-                These Terms are governed by the laws of Maharashtra, India, without regard to conflict principles.
-            </p>
+                    <h3>9. Data Security & Retention</h3>
+                    <p>We apply safeguards, but no system is 100% secure. Data is kept only as long as needed.</p>
 
-            <hr />
-            <h1>Privacy Policy</h1>
-            <p><strong>Effective Date:</strong> 30th May, 2025</p>
+                    <h3>10. Your Privacy Rights</h3>
+                    <ul>
+                        <li>Access, delete, correct, or transfer your data</li>
+                        <li>Restrict or object to processing</li>
+                        <li>Withdraw consent</li>
+                    </ul>
 
-            <h2>1. Information We Collect</h2>
-            <p>
-                - Name, email, phone number<br />
-                - Billing/shipping addresses<br />
-                - Payment info (via secure gateways)<br />
-                - Cookies and browser data
-            </p>
+                    <h3>11. Complaints</h3>
+                    <p>Unhappy with how we handle your data? Contact us or your local authority.</p>
 
-            <h2>2. How We Use Your Information</h2>
-            <p>
-                - Fulfill orders<br />
-                - Customer support<br />
-                - Improve experience<br />
-                - Send marketing (opt-out available)
-            </p>
-
-            <h2>3. Data Sharing and Disclosure</h2>
-            <p>
-                No selling/renting of data.<br />
-                Shared only with:<br />
-                - Payment processors<br />
-                - Delivery/logistics services<br />
-                - Legal authorities (if required)
-            </p>
-
-            <h2>4. Data Security</h2>
-            <p>
-                We use SSL encryption and industry standards.<br />
-                However, no online system is 100% secure.
-            </p>
-
-            <h2>5. Cookies</h2>
-            <p>
-                We use cookies for behavior tracking and marketing.<br />
-                You can disable cookies in your browser.
-            </p>
-
-            <h2>6. Third-Party Links</h2>
-            <p>
-                We're not responsible for the content or privacy of linked third-party sites.
-            </p>
-
-            <h2>7. Your Rights</h2>
-            <p>
-                You may access, update, or delete your data.<br />
-                You can unsubscribe from communications at any time.
-            </p>
-
-            <h2>8. Policy Updates</h2>
-            <p>
-                This policy may be updated periodically. Changes will be posted with a new effective date.
-            </p>
+                    <h3>12. Contact Us</h3>
+                    <p>
+                        📧 <strong>Email:</strong> eaglehub879@gmail.com <br />
+                        📷 <strong>Instagram:</strong> @eaglehub879 <br />
+                        📍 <strong>PIN:</strong> 401201
+                    </p>
+                    <p><strong>EAGLEHUB is owned and operated by Nirvay International – delivering quality, innovation, and trust with every order.</strong></p>
+                </div>
+            </div>
         </div>
     );
 };

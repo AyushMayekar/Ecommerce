@@ -111,3 +111,13 @@
         gap: 1rem;
     }
 }
+
+/* Admin Button Highlight */
+.navbar-links .admin-button {
+    font-weight: 600;
+    color: #ffcc00;
+}
+
+.navbar-links .admin-button:hover {
+    color: #d6ff7b;
+}

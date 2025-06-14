@@ -18,8 +18,8 @@ razorpay_client = razorpay.Client(auth=(settings.TEST_KEY_ID, settings.TEST_KEY_
 
 #  Create order View
 class CreateRazorpayOrder(APIView):
-    # authentication_classes = [MongoDBJWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [MongoDBJWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         user = request.user
@@ -64,8 +64,8 @@ class CreateRazorpayOrder(APIView):
 
 # Verify payment View
 class VerifyPaymentView(APIView):
-    # authentication_classes = [MongoDBJWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [MongoDBJWTAuthentication]
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         try:
             # Extract details from request

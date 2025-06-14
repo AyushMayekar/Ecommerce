@@ -108,6 +108,9 @@ function AuthScreen({ signIn, toggle }) {
             const data = await res.json();
 
             if (res.ok) {
+                if (data.user_role) {
+                    localStorage.setItem("user_role", data.user_role);
+                }
                 Swal.fire({
                     icon: "success",
                     title: "Success!",

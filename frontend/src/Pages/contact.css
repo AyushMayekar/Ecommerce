@@ -1,0 +1,115 @@
+/* Fullscreen page layout */
+
+.contact-page {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Full background image */
+.contact-banner {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+    background: url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80") no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Glossy center container */
+.banner-overlay {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 1.5rem 2rem;
+    width: 90%;
+    max-width: 950px;
+    height: auto;
+    margin: 60px auto; /* Push it down from the navbar and up from the footer */
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+
+    /* Flex styling to center content inside the banner */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+/* Title */
+.contact-title {
+    font-size: 5rem;
+    color: #003366;
+    text-align: center;
+    margin: 0;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Query box */
+.query-box {
+    text-align: center;
+    background: linear-gradient(to right, #003366, #0033668c);
+    padding: 1rem 1rem;
+    border-radius: 12px;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+}
+
+/* Intro */
+.intro-text {
+    font-size: 1rem;
+    text-align: center;
+    color: #222;
+    margin-top: 0.5rem;
+}
+
+/* Contact Info Section */
+.contact-info-box {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(6px);
+    border-radius: 15px;
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    flex-grow: 1;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.contact-item h3 {
+    font-size: 1.7rem;
+    color: #003366;
+    margin-bottom: 0.2rem;
+}
+
+.contact-item p {
+    font-size: 1.3rem;
+    color: #333;
+    margin-left: 0.5rem;
+    margin-top: 0;
+}
+
+/* Social Media text links */
+.social-links-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-left: 0.5rem;
+}
+
+.social-links-text a {
+    color: #007c91;
+    text-decoration: underline;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.social-links-text a:hover {
+    color: #004d60;
+}
