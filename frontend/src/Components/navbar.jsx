@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./navbar.css";
 import { CgProfile } from "react-icons/cg";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
     const [role, setRole] = useState(null);
@@ -23,25 +24,26 @@ const Navbar = () => {
             </div>
 
             <div className="navbar-links">
-                <a href="/home">  Home</a>
-                <a href="/myorders">My Orders</a>
-                <a href="/contact">Contact Us</a>
-                <a href="/policy">Policy</a>
+                <Link to="/home">Home</Link>
+                <Link to="/myorders">My Orders</Link>
+                <Link to="/contact">Contact Us</Link>
+                <Link to="/policy">Policy</Link>
                 {role === "admin" && (
-                    <a href="/admin" className="admin-button">
+                    <Link to="/admin" className="admin-button">
                         Admin
-                    </a>
+                    </Link>
                 )}
             </div>
 
             <div className="navbar-icons">
-                <a href="/cart" title="Cart">
+                <Link to="/cart" title="Cart">
                     <MdOutlineShoppingCart />
                     <span className="icon-label">Cart</span>
-                </a>
-                <a href="/profile" title="Profile">
-                    <CgProfile /> <span className="icon-label">Profile</span>
-                </a>
+                </Link>
+                <Link to="/profile" title="Profile">
+                    <CgProfile />
+                    <span className="icon-label">Profile</span>
+                </Link>
             </div>
         </div>
     );
