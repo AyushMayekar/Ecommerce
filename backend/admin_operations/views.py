@@ -217,7 +217,20 @@ class ReadProductView(APIView):
         if search:
             query_filter["name"] = {"$regex": search, "$options": "i"}
 
-        products = list(products_collection.find(query_filter, {"_id": 0}))
+        products = list(products_collection.find(query_filter, { "_id": 0,
+    "name": 1,
+    "category": 1,
+    "quantity": 1,
+    "quantity_threshold": 1,
+    "description": 1,
+    "colors": 1,
+    "mrp": 1,
+    "wholesale_price": 1,
+    "image_urls": 1,
+    "video_urls": 1,
+    "sku": 1,
+    "gst": 1,
+    "size": 1}))
 
         return Response(products, status=status.HTTP_200_OK)    
 
