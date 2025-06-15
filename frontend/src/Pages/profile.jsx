@@ -6,6 +6,7 @@ import { MdOutlineEdit } from "react-icons/md";
 import { IoSave } from "react-icons/io5";
 import { FaFileUpload } from "react-icons/fa";
 import { ensureAuthenticated } from "../utils/authUtils";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
     const [user, setUser] = useState({
@@ -17,6 +18,7 @@ const Profile = () => {
     });
 
     const [editing, setEditing] = useState(false);
+    const navigate = useNavigate();
     const [emailVerified, setEmailVerified] = useState(false);
     const [phoneVerified, setPhoneVerified] = useState(false);
 

@@ -1,6 +1,7 @@
 // src/pages/ContactUs.jsx
 import React from "react";
 import "./contact.css";
+import { Link } from "react-router-dom";
 
 const ContactUs = () => {
     return (
@@ -39,19 +40,18 @@ const ContactUs = () => {
                             <div className="social-links-text">
                                 <p>
                                     Instagram:{" "}
-                                    <a
-                                        href="https://www.instagram.com/eaglehub879?igsh=MTVyY3Nwc2NsdDRnYQ=="
+                                    <Link to ="https://www.instagram.com/eaglehub879?igsh=MTVyY3Nwc2NsdDRnYQ=="
                                         target="_blank"
                                         rel="noreferrer"
                                     >
                                         eaglehub879
-                                    </a>
+                                    </Link>
                                 </p>
                                 <p>
                                     Facebook:{" "}
-                                    <a href="https://facebook.com" target="_blank" rel="noreferrer">
+                                    <Link to="https://facebook.com" target="_blank" rel="noreferrer">
                                         Visit Facebook
-                                    </a>
+                                    </Link>
                                 </p>
                             </div>
                         </div>

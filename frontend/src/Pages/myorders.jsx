@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from "react";
 import "./myorders.css";
 import { ensureAuthenticated } from "../utils/authUtils";
-
+import { useNavigate } from "react-router-dom";
 
 const MyOrders = () => {
     const [orders, setOrders] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const checkAuth = async () => {

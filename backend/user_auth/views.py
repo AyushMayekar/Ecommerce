@@ -311,7 +311,7 @@ class RefreshTokenView(APIView):
                 "type": "access"
             }, SECRET_KEY, algorithm="HS256")
 
-            response = Response({"message": "Token refreshed"})
+            response = Response({"message": "Token refreshed"}, status=200)
             response.set_cookie(
                 "access_token",
                 new_access,
@@ -339,8 +339,4 @@ class CheckAuthView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        try:
-            user = request.user  
-            return Response({"message": "Authenticated"}, status=200)
-        except AuthenticationFailed:
-            return Response({"error": "Not authenticated"}, status=401)
+        return Response({"message": f"Authenticated as {request.user.get_username()}"}, status=200)

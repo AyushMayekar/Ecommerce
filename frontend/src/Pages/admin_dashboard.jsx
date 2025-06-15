@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import "./admin_dashboard.css";
 import { BiSearchAlt } from "react-icons/bi";
 import { ensureAuthenticated } from "../utils/authUtils";
+import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
     const [products, setProducts] = useState([]);
@@ -29,6 +30,7 @@ const AdminDashboard = () => {
 
     const [coupons, setCoupons] = useState([]);
     const [couponCode, setCouponCode] = useState("");
+    const navigate = useNavigate();
     const [couponDiscount, setCouponDiscount] = useState("");
 
     const [showFilters, setShowFilters] = useState(false);

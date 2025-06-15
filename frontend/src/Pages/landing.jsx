@@ -47,38 +47,50 @@ const LandingPage = () => {
 
 
     const handleGetStarted = async () => {
-        try {
-            // Step 1: Check if access token is valid
-            const res = await fetch("https://eaglehub.onrender.com/check_auth", {
-                method: "GET",
-                credentials: "include", // sends cookies
+    try {
+        // Step 1: Check if access token is valid
+        const res = await fetch("https://eaglehub.onrender.com/check_auth", {
+            method: "GET",
+            credentials: "include", // sends cookies
+        });
+
+        if (res.status === 200) {
+            // Access token valid
+            navigate("/home");
+        } else if (res.status === 401) {
+            // Step 2: Try refreshing the access token
+            const refreshRes = await fetch("https://eaglehub.onrender.com/refresh", {
+                method: "POST",
+                credentials: "include",
             });
 
-            if (res.status === 200) {
-                // Access token valid
-                navigate("/home");
-            } else if (res.status === 401) {
-                // Step 2: Try refreshing the access token
-                const refreshRes = await fetch("https://eaglehub.onrender.com/refresh", {
-                    method: "POST",
+            if (refreshRes.status === 200) {
+                // Step 2.1: Recheck access token validity after refresh
+                const retryRes = await fetch("https://eaglehub.onrender.com/check_auth", {
+                    method: "GET",
                     credentials: "include",
                 });
 
-                if (refreshRes.status === 200) {
-                    // Token refreshed, go to home
+                if (retryRes.status === 200) {
+                    // Now access token is valid
                     navigate("/home");
                 } else {
-                    // Step 3: Both tokens invalid
+                    // Still not valid even after refresh
                     navigate("/user_auth");
                 }
             } else {
+                // Step 3: Both tokens invalid
                 navigate("/user_auth");
             }
-        } catch (err) {
-            console.error("Authentication check failed:", err);
+        } else {
             navigate("/user_auth");
         }
-    };
+    } catch (err) {
+        console.error("Authentication check failed:", err);
+        navigate("/user_auth");
+    }
+};
+
 
     return (
         <div className="page-wrapper">

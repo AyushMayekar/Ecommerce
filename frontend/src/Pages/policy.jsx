@@ -1,6 +1,7 @@
 // src/pages/Policy.jsx
 import React from "react";
 import "./policy.css";
+import { Link } from "react-router-dom";
 
 const Policy = () => {
     return (
@@ -12,7 +13,7 @@ const Policy = () => {
                     <p className="policy-date">Last Updated: 13 June, 2025</p>
 
                     <p>
-                        Welcome to <strong>EAGLEHUB</strong> (“we”, “us”, “our”, or the “Site”). This Privacy Policy explains how we collect, use, and disclose your personal information when you use our services or visit <a href="http://eaglehub.in">http://eaglehub.in</a>. By using our services, you agree to the practices described in this Privacy Policy.
+                        Welcome to <strong>EAGLEHUB</strong> (“we”, “us”, “our”, or the “Site”). This Privacy Policy explains how we collect, use, and disclose your personal information when you use our services or visit <Link to="http://eaglehub.in">http://eaglehub.in</Link>. By using our services, you agree to the practices described in this Privacy Policy.
                     </p>
 
                     <h3>1. Changes to This Privacy Policy</h3>
