@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import BasePermission
 from rest_framework.response import Response
+from rest_framework import status
 from django.conf import settings
 import jwt
 import pymongo
@@ -88,6 +89,10 @@ class UserObject:
     def get_username(self):
         return self.username
 
+# Response Status Modification
+class Unauthorized401(AuthenticationFailed):
+    status_code = status.HTTP_401_UNAUTHORIZED
+
 # Authentication Class
 class MongoDBJWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
@@ -95,35 +100,35 @@ class MongoDBJWTAuthentication(BaseAuthentication):
         token = request.COOKIES.get('access_token')
         if not token:
             logger.debug("No access_token cookie found.")
-            raise AuthenticationFailed("Access token is missing.")
+            raise Unauthorized401("Access token is missing.")
         try:
             payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
             logger.debug(f"Decoded payload: {payload}")
             if payload.get("type") != "access":
                 logger.debug("Token type is not access.")
-                raise AuthenticationFailed("Token type is not access.")
+                raise Unauthorized401("Token type is not access.")
 
             username = payload.get("username")
             if not username:
                 logger.debug("No username in payload.")
-                raise AuthenticationFailed("Username not found in token.")
+                raise Unauthorized401("Username not found in token.")
 
             user = users_collection.find_one({"username": username})
             if not user:
                 logger.debug("User not found in database.")
-                raise AuthenticationFailed("User not found in database.")
+                raise Unauthorized401("User not found in database.")
 
             return (UserObject(user), None)
 
         except jwt.ExpiredSignatureError:
             logger.debug("Token expired.")
-            raise AuthenticationFailed("Access token is expired.")
+            raise Unauthorized401("Access token is expired.")
         except jwt.InvalidTokenError:
             logger.debug("Invalid token.")
-            raise AuthenticationFailed("Access token is invalid.")
+            raise Unauthorized401("Access token is invalid.")
         except Exception as e:
             logger.error(f"Authentication error: {e}")
-            raise AuthenticationFailed("Authentication failed.")
+            raise Unauthorized401("Authentication failed.")
 
 # Registration Functionality
 class RegisterView(APIView):
