@@ -39,15 +39,15 @@ const AdminDashboard = () => {
     const [priceMax, setPriceMax] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
 
-    // useEffect(() => {
-    //     const checkAuth = async () => {
-    //         const isAuth = await ensureAuthenticated();
-    //         if (!isAuth) {
-    //             navigate("/user_auth");
-    //         }
-    //     };
-    //     checkAuth();
-    // }, []);
+    useEffect(() => {
+        const checkAuth = async () => {
+            const isAuth = await ensureAuthenticated();
+            if (!isAuth) {
+                navigate("/user_auth");
+            }
+        };
+        checkAuth();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
