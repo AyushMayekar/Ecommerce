@@ -282,7 +282,7 @@ const AdminDashboard = () => {
             category.trim() === "" || (product.category?.toLowerCase() || "").includes(category.toLowerCase());
             const matchesMinPrice = priceMin === "" || parseFloat(product.mrp) >= parseFloat(priceMin);
             const matchesMaxPrice = priceMax === "" || parseFloat(product.mrp) <= parseFloat(priceMax);
-            const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesSearch = (product.name?.toLowerCase() || "").includes(searchQuery.toLowerCase());
             return matchesCategory && matchesMinPrice && matchesMaxPrice && matchesSearch;
         }) : [];
 
