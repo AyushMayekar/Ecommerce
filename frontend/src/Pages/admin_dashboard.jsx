@@ -479,7 +479,7 @@ const AdminDashboard = () => {
                                     </div>
                                 </div>
                             ))}
-                            {filteredProducts.length === 0 && (
+                            {(filteredProducts || []).length === 0 && (
                                 <p className="no-products">No matching products found.</p>
                             )}
                         </div>
