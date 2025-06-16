@@ -322,7 +322,7 @@ class RefreshTokenView(APIView):
                 new_access,
                 httponly=True,
                 secure=True,
-                samesite="Strict",
+                samesite="None",
                 max_age=15*60
             )
             logger.info(f"Token refreshed for user: {payload['username']}")
