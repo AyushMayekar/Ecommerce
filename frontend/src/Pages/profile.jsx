@@ -23,17 +23,35 @@ const Profile = () => {
     const [phoneVerified, setPhoneVerified] = useState(false);
 
 
-    useEffect(() => {
-        const checkAuth = async () => {
-            const isAuth = await ensureAuthenticated();
-            if (!isAuth) {
-                navigate("/user_auth");
-            }
-        };
-        checkAuth();
-    }, []);
+    // useEffect(() => {
+    //     const checkAuth = async () => {
+    //         const isAuth = await ensureAuthenticated();
+    //         if (!isAuth) {
+    //             navigate("/user_auth");
+    //         }
+    //     };
+    //     checkAuth();
+    // }, []);
+
+    // useEffect(() => {
+    //     const storedUser = JSON.parse(localStorage.getItem("userProfile"));
+    //     if (storedUser) {
+    //         setUser(prev => ({
+    //             ...prev,
+    //             ...storedUser
+    //         }));
+    //     }
+    // }, []);
 
     useEffect(() => {
+    const checkAuthAndLoadProfile = async () => {
+        const isAuth = await ensureAuthenticated();
+        if (!isAuth) {
+            navigate("/user_auth");
+            return;
+        }
+
+        // If authenticated, now load profile from localStorage
         const storedUser = JSON.parse(localStorage.getItem("userProfile"));
         if (storedUser) {
             setUser(prev => ({
@@ -41,8 +59,10 @@ const Profile = () => {
                 ...storedUser
             }));
         }
-    }, []);
+    };
 
+    checkAuthAndLoadProfile();
+}, []);
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;

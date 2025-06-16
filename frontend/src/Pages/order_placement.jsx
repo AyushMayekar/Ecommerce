@@ -25,26 +25,51 @@ const BuyNow = () => {
     });
     const [paymentMethod, setPaymentMethod] = useState("Online Payment Options");
 
+    // useEffect(() => {
+    //     const checkAuth = async () => {
+    //         const isAuth = await ensureAuthenticated();
+    //         if (!isAuth) {
+    //             navigate("/user_auth");
+    //         }
+    //     };
+    //     checkAuth();
+    // }, []);
+
+    // useEffect(() => {
+    //     const data = orderItems.length > 0 ? orderItems : [location.state];
+    //     setProducts(data);
+    // }, [location.state]);
+
+    // useEffect(() => {
+    //     const sub = products.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    //     const qty = products.reduce((acc, item) => acc + item.quantity, 0);
+    //     setSubtotal(sub);
+    //     setTotalQty(qty);
+    // }, [products]);
+
     useEffect(() => {
-        const checkAuth = async () => {
+        const checkAuthAndLoadData = async () => {
             const isAuth = await ensureAuthenticated();
             if (!isAuth) {
                 navigate("/user_auth");
+                return;
             }
+
+            // Auth is valid, now load data
+            const data = orderItems.length > 0 ? orderItems : [location.state];
+            setProducts(data);
         };
-        checkAuth();
-    }, []);
+
+        checkAuthAndLoadData();
+    }, [location.state, orderItems]);
 
     useEffect(() => {
-        const data = orderItems.length > 0 ? orderItems : [location.state];
-        setProducts(data);
-    }, [location.state]);
-
-    useEffect(() => {
-        const sub = products.reduce((acc, item) => acc + item.price * item.quantity, 0);
-        const qty = products.reduce((acc, item) => acc + item.quantity, 0);
-        setSubtotal(sub);
-        setTotalQty(qty);
+        if (products.length > 0) {
+            const sub = products.reduce((acc, item) => acc + item.price * item.quantity, 0);
+            const qty = products.reduce((acc, item) => acc + item.quantity, 0);
+            setSubtotal(sub);
+            setTotalQty(qty);
+        }
     }, [products]);
 
     const handleShippingChange = (e) => {

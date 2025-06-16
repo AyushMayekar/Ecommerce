@@ -11,17 +11,23 @@ const MyOrders = () => {
     useEffect(() => {
         const checkAuth = async () => {
             const isAuth = await ensureAuthenticated();
-            if (!isAuth) {
+            if (isAuth){
+                await fetchStoredOrders();
+            } else {
                 navigate("/user_auth");
             }
         };
         checkAuth();
     }, []);
 
-    useEffect(() => {
-        const storedOrders = JSON.parse(localStorage.getItem("orders")) || [];
-        setOrders(storedOrders);
-    }, []);
+        const fetchStoredOrders = async () => {
+            try {
+                const orders = JSON.parse(localStorage.getItem("orders")) || [];
+                setOrders(orders);
+            } catch (err) {
+                console.error("Failed to fetch stored orders:", err);
+            }
+        };
 
     const deleteOrder = (id) => {
         const filtered = orders.filter((order) => order.id !== id);
