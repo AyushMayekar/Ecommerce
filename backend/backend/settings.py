@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "rest_framework", 
     'rest_framework_simplejwt',
     'multiple_product_page.apps.MultipleProductPageConfig',
+    'coldstart.apps.ColdstartConfig',
     'single_product_api.apps.SingleProductApiConfig',
     'payment_gateway.apps.PaymentGatewayConfig',
     'admin_operations.apps.AdminOperationsConfig',

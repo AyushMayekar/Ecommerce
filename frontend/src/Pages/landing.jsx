@@ -35,6 +35,22 @@ const LandingPage = () => {
     const [fade, setFade] = useState(true);
 
     useEffect(() => {
+    const wakeUpServer = async () => {
+        try {
+            await fetch("https://eaglehub.onrender.com/ping", {
+                method: "GET",
+                credentials: "include",
+            });
+            console.log("🔁 Server warmed up");
+        } catch (err) {
+            console.error("⚠️ Server warm-up failed:", err);
+        }
+    };
+
+    wakeUpServer();
+}, []);
+
+    useEffect(() => {
         const interval = setInterval(() => {
             setFade(false);
             setTimeout(() => {
