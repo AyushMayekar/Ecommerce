@@ -12,7 +12,9 @@ const CartPage = () => {
     useEffect(() => {
         const checkAuth = async () => {
             const isAuth = await ensureAuthenticated();
-            if (!isAuth) {
+            if (isAuth){
+                await fetchCart();
+            } else {
                 navigate("/user_auth");
             }
         };
@@ -31,9 +33,6 @@ const CartPage = () => {
         }
     };
 
-    useEffect(() => {
-        fetchCart();
-    }, []);
 
     const updateQuantity = async (sku, newQty) => {
         const item = cartItems.find(i => i.sku === sku);

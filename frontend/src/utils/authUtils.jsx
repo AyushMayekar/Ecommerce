@@ -11,7 +11,7 @@ export const ensureAuthenticated = async () => {
             return true; // Access token is valid
         }
 
-        if (res.status === 401) {
+        if (res.status === 401 || res.status == 403) {
             // Step 2: Try to refresh token
             const refreshRes = await fetch("https://eaglehub.onrender.com/refresh", {
                 method: "POST",

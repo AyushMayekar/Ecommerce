@@ -57,7 +57,7 @@ const LandingPage = () => {
         if (res.status === 200) {
             // Access token valid
             navigate("/home");
-        } else if (res.status === 401) {
+        } else if (res.status === 401 || res.status == 403) {
             // Step 2: Try refreshing the access token
             const refreshRes = await fetch("https://eaglehub.onrender.com/refresh", {
                 method: "POST",
