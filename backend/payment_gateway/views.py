@@ -7,6 +7,10 @@ from rest_framework.response import Response
 import razorpay
 import uuid
 from datetime import datetime
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.management import call_command
+import os
 
 # Initialize MongoDB client
 client = MongoClient(settings.MONGODB_URL)
@@ -99,3 +103,16 @@ class VerifyPaymentView(APIView):
                 {"$set": {"payment_status": "FAILED"}}
             )
             return Response({"error": "Payment verification failed"}, status=400)
+        
+# Function to delete stale orders
+@csrf_exempt
+def run_delete_stale_orders(request):
+    token = request.GET.get("token")
+    if token != settings.CRON_SECRET_TOKEN:
+        return JsonResponse({"error": "Unauthorized"}, status=403)
+
+    try:
+        call_command('delete_stale_orders')
+        return JsonResponse({"status": "Success"})
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

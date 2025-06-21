@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'multiple_product_page.apps.MultipleProductPageConfig',
     'coldstart.apps.ColdstartConfig',
     'single_product_api.apps.SingleProductApiConfig',
+    'user_order_management.apps.UserOrderManagementConfig',
+    'admin_order_management.apps.AdminOrderManagementConfig',
     'payment_gateway.apps.PaymentGatewayConfig',
     'admin_operations.apps.AdminOperationsConfig',
     'forgot_password.apps.ForgotPasswordConfig',
@@ -155,12 +157,12 @@ TEST_KEY_ID = os.getenv('TEST_KEY_ID')
 # CORS settings
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    "eaglehub.onrender.com",
+    "https://eaglehub.onrender.com",
     "https://eaglehub.in",  
 ]
 
 # CSRF settings
-CSRF_TRUSTED_ORIGINS = ['eaglehub.onrender.com', 'https://eaglehub.in']
+CSRF_TRUSTED_ORIGINS = ['https://eaglehub.in', 'https://eaglehub.onrender.com']
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SECURE = True
@@ -175,3 +177,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'apikey'  # literal string 'apikey'
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+
+# CRON settings
+CRON_SECRET_TOKEN = os.getenv('CRON_SECRET_TOKEN')

@@ -26,4 +26,6 @@ urlpatterns = [
     path('', include('payment_gateway.urls')),
     path('', include('forgot_password.urls')),
     path('', include('coldstart.urls')),
+    path('', include('user_order_management.urls')),
+    path('', include('admin_order_management.urls')),
 ]

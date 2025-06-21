@@ -233,5 +233,3 @@ class ReadProductView(APIView):
     "size": 1}))
 
         return Response(products, status=status.HTTP_200_OK)    
-
-    # Order Management Views
