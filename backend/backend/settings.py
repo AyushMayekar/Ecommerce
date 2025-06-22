@@ -28,8 +28,10 @@ SECRET_KEY = 'django-insecure-4765g=n!m9dnz^^w8g5of*9g211e12=&u9iqgw+@8)k&1f88qc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["eaglehub.onrender.com",
+ALLOWED_HOSTS = [ "eaglehub.onrender.com",
     "https://eaglehub.in",]
+
+# ALLOWED_HOSTS = []
 
 
 # Application definition
