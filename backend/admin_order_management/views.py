@@ -2,8 +2,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from user_auth.views import MongoDBJWTAuthentication
+import razorpay
 from pymongo import MongoClient
 from django.conf import settings
+
+# Razorpay Initializations
+razorpay_client = razorpay.Client(auth=(settings.TEST_KEY_ID, settings.TEST_KEY_SECRET))
 
 # MongoDB Setup
 client = MongoClient(settings.MONGODB_URL)
@@ -31,7 +35,6 @@ class PendingDispatchOrdersView(APIView):
             return Response({"orders": orders}, status=200)
         except Exception as e:
             return Response({"error": str(e)}, status=500)
-
 
 # Mark Order as Dispatched
 class MarkOrderDispatchedView(APIView):
@@ -101,22 +104,33 @@ class ConfirmRefundView(APIView):
         if order.get("refund_status") != "Pending":
             return Response({"error": "Refund is not pending for this order"}, status=400)
 
+        payment_id = order.get("payment_id")
+        amount = int(float(order.get("subtotal", 0)) * 100)  # Convert to paise
         username = order.get("user")
 
-        # Step 1: Restock inventory
-        for item in order.get("order_items", []):
-            sku = item.get("sku")
-            qty = item.get("quantity", 0)
-            products_collection.update_one({"sku": sku}, {"$inc": {"quantity": qty}})
+        try:
+            # Step 0: Process the refund with Razorpay
+            refund = razorpay_client.payment.refund(payment_id, {"amount": amount})
 
-        # Step 2: Remove from user's my_orders
-        users_collection.update_one(
-            {"username": username},
-            {"$pull": {"my_orders": {"razorpay_order_id": order_id}}}
-        )
+            # Step 1: Restock inventory
+            for item in order.get("order_items", []):
+                sku = item.get("sku")
+                qty = item.get("quantity", 0)
+                products_collection.update_one({"sku": sku}, {"$inc": {"quantity": qty}})
 
-        # Step 3: Delete order
-        orders_collection.delete_one({"razorpay_order_id": order_id})
+            # Step 2: Remove from user's my_orders
+            users_collection.update_one(
+                {"username": username},
+                {"$pull": {"my_orders": {"razorpay_order_id": order_id}}}
+            )
 
-        return Response({"message": "Refund confirmed and order removed from database"}, status=200)
+            # Step 3: Delete order
+            orders_collection.delete_one({"razorpay_order_id": order_id})
 
+            return Response({"message": "Refund confirmed and order removed from database", "refund_id": refund.get("id"),}, status=200)
+
+        except razorpay.errors.BadRequestError as e:
+            return Response({"error": f"Razorpay error: {str(e)}"}, status=400)
+    
+        except Exception as e:
+            return Response({"error": f"Refund error: {str(e)}"}, status=500)

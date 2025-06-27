@@ -22,27 +22,6 @@ const Profile = () => {
     const [emailVerified, setEmailVerified] = useState(false);
     const [phoneVerified, setPhoneVerified] = useState(false);
 
-
-    // useEffect(() => {
-    //     const checkAuth = async () => {
-    //         const isAuth = await ensureAuthenticated();
-    //         if (!isAuth) {
-    //             navigate("/user_auth");
-    //         }
-    //     };
-    //     checkAuth();
-    // }, []);
-
-    // useEffect(() => {
-    //     const storedUser = JSON.parse(localStorage.getItem("userProfile"));
-    //     if (storedUser) {
-    //         setUser(prev => ({
-    //             ...prev,
-    //             ...storedUser
-    //         }));
-    //     }
-    // }, []);
-
     useEffect(() => {
     const checkAuthAndLoadProfile = async () => {
         const isAuth = await ensureAuthenticated();
