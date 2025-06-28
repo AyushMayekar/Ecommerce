@@ -242,6 +242,7 @@ body {
     justify-content: space-around;
     gap: 2rem;
     margin-top: 3rem;
+    scroll-margin-top: 80px; 
     padding: 3rem 2rem;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(12px);
@@ -350,16 +351,16 @@ body {
 }
 
 .filter-icon {
-    font-size: 36px;        /* 🔥 Size (change to 20px, 30px, etc.) */
-    color: rgb(0, 51, 120);            /* 🎨 Color — can be any hex, rgb, or named color */
-    margin-left: 10px;      /* 📦 Position - tweak margins to move it */
-    transition: 0.3s ease;  /* ✨ Optional hover animation */
+    font-size: 36px;        
+    color: rgb(0, 51, 120);            
+    margin-left: 10px;      
+    transition: 0.3s ease;  
     margin-top: 10px;
     margin-right: 12px;
 }
 
 .filter-icon:hover {
-    color: rgba(255, 255, 255, 0.495);            /* Change color on hover if needed */
+    color: rgba(255, 255, 255, 0.495);           
 }
 
 .filter-dropdown {
@@ -386,4 +387,53 @@ body {
 
 .filter-dropdown input::placeholder {
     color: #fff;
+}
+
+.scroll-hint {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #ffffff;
+    text-align: center;
+    margin: 2rem auto;
+    margin-left: 750px;
+    bottom: 2rem;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px 20px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.scroll-hint:hover {
+    color: rgb(0, 51, 120);;
+    background-color: rgba(0, 0, 0, 0.171);
+    transform: translateX(-50%) scale(1.05);
+}
+
+/* Animate icon inside */
+.scroll-icon {
+    display: inline-block;
+    margin-right: 10px;
+    animation: bounce 1.5s infinite;
+    font-size: 1.8rem;
+}
+
+/* Optional icon animation */
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(5px);
+    }
 }
