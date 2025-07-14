@@ -25,28 +25,6 @@ const BuyNow = () => {
     });
     const [paymentMethod, setPaymentMethod] = useState("Online Payment Options");
 
-    // useEffect(() => {
-    //     const checkAuth = async () => {
-    //         const isAuth = await ensureAuthenticated();
-    //         if (!isAuth) {
-    //             navigate("/user_auth");
-    //         }
-    //     };
-    //     checkAuth();
-    // }, []);
-
-    // useEffect(() => {
-    //     const data = orderItems.length > 0 ? orderItems : [location.state];
-    //     setProducts(data);
-    // }, [location.state]);
-
-    // useEffect(() => {
-    //     const sub = products.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    //     const qty = products.reduce((acc, item) => acc + item.quantity, 0);
-    //     setSubtotal(sub);
-    //     setTotalQty(qty);
-    // }, [products]);
-
     useEffect(() => {
         const checkAuthAndLoadData = async () => {
             const isAuth = await ensureAuthenticated();
@@ -99,17 +77,17 @@ const BuyNow = () => {
             total_quantity: totalQty
         };
 
-        if (paymentMethod === "Cash On Delivery") {
-            try {
-                const res = await axios.post("https://eaglehub.onrender.com/create_order", orderPayload, { withCredentials: true });
-                if (res.status === 200) {
-                    Swal.fire("Order Placed", "Cash on Delivery confirmed!", "success");
-                    navigate("/success");
-                }
-            } catch (err) {
-                Swal.fire("Error", "Failed to place COD order.", "error");
-            }
-        } else {
+        // if (paymentMethod === "Cash On Delivery") {
+        //     try {
+        //         const res = await axios.post("https://eaglehub.onrender.com/create_order", orderPayload, { withCredentials: true });
+        //         if (res.status === 200) {
+        //             Swal.fire("Order Placed", "Cash on Delivery confirmed!", "success");
+        //             navigate("/payment_success");
+        //         }
+        //     } catch (err) {
+        //         Swal.fire("Error", "Failed to place COD order.", "error");
+        //     }
+        // } else {
             try {
                 const res = await axios.post("https://eaglehub.onrender.com/create_order", orderPayload, { withCredentials: true });
                 const { order_id, amount, key } = res.data;
@@ -128,7 +106,7 @@ const BuyNow = () => {
                                 razorpay_signature: response.razorpay_signature,
                             }, { withCredentials: true });
                             Swal.fire("Payment Success", "Your payment was verified.", "success");
-                            navigate("/success");
+                            navigate("/payment_success");
                         } catch (err) {
                             Swal.fire("Verification Failed", "Payment verification failed.", "error");
                         }
@@ -146,7 +124,7 @@ const BuyNow = () => {
                 rzp.open();
             } catch (err) {
                 Swal.fire("Error", "Failed to initiate payment.", "error");
-            }
+            // }
         }
     };
 
@@ -190,7 +168,7 @@ const BuyNow = () => {
 
                         <div className="payment-method">
                             <h3>💳 Payment Method</h3>
-                            {["Online Payment Options", "Cash On Delivery"].map((method) => (
+                            {["Online Payment Options"].map((method) => (
                                 <label key={method}>
                                     <input
                                         type="radio"

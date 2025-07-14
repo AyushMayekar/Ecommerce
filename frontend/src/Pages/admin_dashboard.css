@@ -104,13 +104,13 @@ textarea {
 }
 
 .btn-submit {
-    background: linear-gradient(to right, #0033668c, #003366c1, #003366);
+    background-color: #003366;
     color: #fff;
 }
 
 .btn-submit:hover {
     transform: scale(1.03);
-    background: linear-gradient(to right, #0033668c, #003366c1, #003366);
+    background-color: #003c77;
 }
 
 .btn-cancel {
@@ -312,9 +312,33 @@ textarea {
 }
 
 .btn-view-all:hover {
-    background-color: #003366c1;
+    background-color: #003c77;
     transform: scale(1.05);
 }
+
+.view-orders-btn-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+
+.btn-view-orders {
+    background-color: #003366;
+    color: white;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-view-orders:hover {
+    background-color: #003c77;
+    transform: scale(1.05);
+}
+
 
 .fancy-search {
     display: flex;
@@ -356,17 +380,22 @@ textarea {
 }
 
 .admin-filter-icon {
-    font-size: 38px;        /* 🔥 Size (change to 20px, 30px, etc.) */
-    color: rgb(0, 51, 120);            /* 🎨 Color — can be any hex, rgb, or named color */
-    margin-left: 20px;      /* 📦 Position - tweak margins to move it */
-    transition: 0.3s ease;  /* ✨ Optional hover animation */
+    font-size: 38px;
+    /* 🔥 Size (change to 20px, 30px, etc.) */
+    color: rgb(0, 51, 120);
+    /* 🎨 Color — can be any hex, rgb, or named color */
+    margin-left: 20px;
+    /* 📦 Position - tweak margins to move it */
+    transition: 0.3s ease;
+    /* ✨ Optional hover animation */
     margin-top: -45px;
     margin-right: 10px;
     margin-bottom: 100px;
 }
 
 .admin-filter-icon:hover {
-    color: rgba(255, 255, 255, 0.495);            /* Change color on hover if needed */
+    color: rgba(255, 255, 255, 0.495);
+    /* Change color on hover if needed */
 }
 
 .admin-filter-dropdown {
@@ -418,9 +447,196 @@ textarea {
     overflow-x: auto;
     max-width: 100%;
 }
+
 .product-media-preview img,
 .product-media-preview video {
     max-height: 120px;
     object-fit: cover;
     border-radius: 8px;
+}
+
+/* Main Orders Section Container */
+.orders-section {
+    padding: 30px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0);
+    /* Transparent */
+    backdrop-filter: blur(10px);
+    /* Frosted glass effect */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Heading */
+.orders-heading {
+    font-size: 2rem;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Each Order Card */
+.order-card {
+    background: rgb(255, 255, 255);
+    /* Semi-transparent */
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+    border-radius: 16px;
+    margin-bottom: 20px;
+    padding: 20px;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.order-card:hover {
+    background: #cdeaff;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+}
+
+/* Order Sections inside card */
+.order-section {
+    margin-bottom: 20px;
+    padding: 12px 18px;
+    border-left: 4px solid #0033668c;
+    /* Customize to match your primary theme */
+    background: rgba(255, 255, 255, 0);
+    border-radius: 12px;
+}
+
+.order-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #000000;
+}
+
+/* Order Item Block */
+.order-item {
+    margin-bottom: 12px;
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border-left: 4px solid #555;
+    border-radius: 10px;
+}
+
+/* Dispatch Button */
+.btn-dispatch {
+    background: linear-gradient(to right, #003366, #182848);
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+.btn-dispatch:hover {
+    background: linear-gradient(to right, #003366, #0f1b35);
+    transform: scale(1.05);
+}
+
+.btn-refund {
+    background: linear-gradient(to right, #d80101, #ff0000);
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+.btn-refund:hover {
+    background: linear-gradient(to right, #d80101, #ff0000);
+    transform: scale(1.05);
+}
+
+/* Empty state */
+.no-orders {
+    text-align: center;
+    font-style: italic;
+    color: #555;
+    margin-top: 20px;
+}
+
+.icon-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #182848;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.minimal-input {
+    padding: 12px;
+    border: 2px solid #182848;
+    margin-left: 30px;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+}
+
+.filter-panel {
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    padding: 20px;
+    border: 2px solid #182848;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #e0f7fa 0%, #ffffff 100%);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* Modern Select Styling */
+.styled-select {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 2px solid #4285f4;
+    border-radius: 8px;
+    background-color: white;
+    color: #003366;
+    outline: none;
+    min-width: 160px;
+    transition: border-color 0.2s ease;
+}
+
+.styled-select:focus {
+    border-color: #0040ff;
+}
+
+/* Date Styling */
+.date-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.date-label {
+    font-size: 13px;
+    color: #003366;
+    margin-left: 4px;
+}
+
+.styled-date {
+    padding: 8px 12px;
+    border: 2px solid #4285f4;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+    min-width: 160px;
+    background-color: white;
+    color: #003366;
+}
+
+.styled-date:focus {
+    border-color: #0040ff;
 }

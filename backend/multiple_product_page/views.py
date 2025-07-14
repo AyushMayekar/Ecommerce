@@ -36,3 +36,24 @@ class MultipleProductPageView(APIView):
         products = list(products_collection.find(query_filter, {"_id": 0}))
 
         return Response(products, status=status.HTTP_200_OK)
+
+class RandomProductsView(APIView):
+    def get(self, request):
+        try:
+            limit = int(request.query_params.get("limit", 8))
+        except ValueError:
+            limit = 8
+
+        total_products = products_collection.count_documents({})
+        limit = min(limit, total_products)
+
+        if total_products == 0:
+            return Response([], status=200)
+
+        pipeline = [{"$sample": {"size": limit}}]
+        products = list(products_collection.aggregate(pipeline))
+
+        for p in products:
+            p["_id"] = str(p["_id"])  # Make ObjectId JSON serializable
+
+        return Response(products, status=200)

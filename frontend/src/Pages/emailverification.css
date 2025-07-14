@@ -1,0 +1,79 @@
+/* src/pages/emailVerification.css */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.email-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    padding: auto;
+}
+
+.verify-container {
+    background: linear-gradient(to bottom right, #003366, #0040ff, #4285f4);
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    font-family: "Segoe UI", sans-serif;
+    padding-top: 65px;
+    padding-bottom: 50px;
+}
+
+.verify-card {
+    background-color: white;
+    color: #003366;
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+}
+
+.verify-card h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+.verify-card p {
+    font-size: 1.1rem;
+}
+
+.redirect-msg {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: #4285f4;
+    font-weight: bold;
+}
+
+.error .verify-card {
+    border: 3px solid red;
+    color: red;
+}
+
+.success .verify-card {
+    border: 3px solid #28a745; /* Green */
+    color: #28a745;
+}
+
+.verify-icon {
+    font-size: 64px;
+    margin-bottom: 1rem;
+}
+
+.success-icon {
+    color: #28a745; /* Green */
+}
+
+.error-icon {
+    color: #dc3545; /* Red */
+}

@@ -61,16 +61,16 @@ class AddProductView(APIView):
         data = request.data
 
         # Required fields
-        product_name = data.get("name").strip().lower()
-        category = data.get("category").strip().lower()
+        product_name = data.get("name").strip()
+        category = data.get("category").strip()
         quantity = int(data.get("quantity"))
         try:
             quantity_threshold = int(data.get("quantity_threshold"))
         except ValueError:
             quantity_threshold = 0
-        description = data.get("description").strip().lower()
-        colors = [c.strip().lower() for c in data.get("colors", "").split(",") if c.strip()]
-        size = [s.strip().upper() for s in data.get("size", "").split(",") if s.strip()]
+        description = data.get("description").strip()
+        colors = [c.strip() for c in data.get("colors", "").split(",") if c.strip()]
+        size = [s.strip() for s in data.get("size", "").split(",") if s.strip()]
         try:
             mrp = float(data.get("mrp"))
         except ValueError:

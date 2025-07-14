@@ -16,6 +16,8 @@ import os
 client = MongoClient(settings.MONGODB_URL)
 db = client["EagleHub"]
 orders_collection = db["Orders"]
+user_collection = db["Users"]
+products_collection = db["Products"]
 
 # Razorpay Credentials (Test keys for now)
 razorpay_client = razorpay.Client(auth=(settings.TEST_KEY_ID, settings.TEST_KEY_SECRET))
@@ -55,8 +57,23 @@ class CreateRazorpayOrder(APIView):
             "created_at": datetime.utcnow(),
             "order_items": order_items,
             "shipping_info": shipping_info,
+            "delivery_status": "Not Dispatched",
         }
         orders_collection.insert_one(order_record)
+
+        # Update user doc in users collection
+        user_collection.update_one(
+            {"username": user.username},
+            {"$push": {"my_orders": order_record}},
+            upsert=True
+        )
+
+        # Update quantity in Products collection
+        for item in order_items:
+            products_collection.update_one(
+                {"sku": item["sku"]},
+                {"$inc": {"quantity": -int(item["quantity"])}}
+            )
 
         return Response({
             "order_id": razorpay_order["id"],
@@ -73,6 +90,7 @@ class VerifyPaymentView(APIView):
     def post(self, request):
         try:
             # Extract details from request
+            user = request.user
             data = request.data
             params_dict = {
                 "razorpay_order_id": data.get("razorpay_order_id"),
@@ -89,11 +107,26 @@ class VerifyPaymentView(APIView):
                 {
                     "$set": {
                         "payment_id": params_dict["razorpay_payment_id"],
-                        "payment_status": "PAID"
+                        "payment_status": "PAID",
+                        "delivery_status": "Not Dispatched"
                     }
                 }
             )
 
+# Step 3: Update user's my_orders (if order already pushed)
+            user_collection.update_one(
+                {
+                    "username": user.username,
+                    "my_orders.razorpay_order_id": params_dict["razorpay_order_id"]
+                },
+                {
+                    "$set": {
+                        "my_orders.$.payment_status": "PAID",
+                        "my_orders.$.payment_id": params_dict["razorpay_payment_id"],
+                        "my_orders.$.delivery_status": "Not Dispatched"
+                    }
+                }
+            )
             return Response({"message": "Payment verified successfully"}, status=200)
 
         except razorpay.errors.SignatureVerificationError:
@@ -102,7 +135,7 @@ class VerifyPaymentView(APIView):
                 {"razorpay_order_id": data.get("razorpay_order_id")},
                 {"$set": {"payment_status": "FAILED"}}
             )
-            return Response({"error": "Payment verification failed"}, status=400)
+            return Response({"error": "❌ Payment verification failed"}, status=400)
         
 # Function to delete stale orders
 @csrf_exempt

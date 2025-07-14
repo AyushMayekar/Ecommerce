@@ -28,4 +28,5 @@ urlpatterns = [
     path('', include('coldstart.urls')),
     path('', include('user_order_management.urls')),
     path('', include('admin_order_management.urls')),
+    path('', include('profile_setup.urls')),
 ]

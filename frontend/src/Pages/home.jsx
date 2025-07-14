@@ -1,18 +1,21 @@
 // src/pages/HomePage.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ensureAuthenticated } from "../utils/authUtils";
 import { useNavigate } from "react-router-dom";
 import "./home.css";
 import { BiSearchAlt } from "react-icons/bi";
+import { FaAnglesDown } from "react-icons/fa6";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoFilter } from "react-icons/io5";
 import OfferBanner1 from "../assets/offerBanner1.jpg";
 import OfferBanner2 from "../assets/offerBanner2.jpg";
 import OfferBanner3 from "../assets/offerBanner3.jpg";
+import ReelVideo from "../assets/reel1.mp4";
 
 const HomePage = () => {
     const navigate = useNavigate();
+    const productSectionRef = useRef(null);
 
     const offers = [
         {
@@ -45,6 +48,37 @@ const HomePage = () => {
     const [fade, setFade] = useState(true);
 
     useEffect(() => {
+        const verificationStatus = localStorage.getItem("verification_status");
+        const startTime = localStorage.getItem("verification_start_time");
+        if (verificationStatus !== "unverified" || !startTime) return;
+
+        const now = Date.now();
+        const elapsed = now - parseInt(startTime, 10);
+        const twentyFourHours = 24 * 60 * 60 * 1000;
+
+        // If already expired, block the user
+        if (elapsed >= twentyFourHours) {
+            blockUser();
+            return;
+        }
+
+        // ⏱ Reminder loop
+        const notifyInterval = setInterval(() => {
+            toast.warn("⚠️ Reminder: Please verify your email and phone number within 24 hours.");
+        }, 20 * 60 * 1000); 
+
+        // ⏲ Timeout to block after remaining time
+        const blockTimeout = setTimeout(() => {
+            blockUser();
+        }, twentyFourHours - elapsed);
+
+        return () => {
+            clearInterval(notifyInterval);
+            clearTimeout(blockTimeout);
+        };
+    }, []);
+
+    useEffect(() => {
         const interval = setInterval(() => {
             setFade(false);
             setTimeout(() => {
@@ -54,6 +88,64 @@ const HomePage = () => {
         }, 6000);
         return () => clearInterval(interval);
     }, [offers.length]);
+
+    useEffect(() => {
+        fetchInitialProducts();
+    }, []);
+
+    const fetchInitialProducts = async () => {
+        try {
+            const res = await fetch("https://eaglehub.onrender.com/random?limit=8", {
+                credentials: "include",
+            });
+            const data = await res.json();
+            setProducts(data);
+        } catch (err) {
+            console.error("Error loading initial products", err);
+        }
+    };
+
+    const blockUser = async () => {
+    try {
+        const res = await fetch("https://eaglehub.onrender.com/block_user", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (res.ok) {
+            // Cleanup
+            localStorage.clear();
+            document.cookie = "access_token=; Max-Age=0";
+            document.cookie = "refresh_token=; Max-Age=0";
+
+            toast.error("⛔ You’ve been blocked due to failure to verify.");
+            setTimeout(() => {
+                window.location.href = "/user_auth"; // redirect to login
+            }, 2000);
+        } else {
+            toast.error("Failed to block user.");
+        }
+    } catch (err) {
+        console.error("Block user error:", err);
+    }
+};
+
+    const scrollToProducts = () => {
+        const container = document.querySelector(".home-container");
+        if (productSectionRef.current && container) {
+            const yOffset = -70; // Adjust for navbar if needed
+            const scrollY =
+                productSectionRef.current.getBoundingClientRect().top -
+                container.getBoundingClientRect().top +
+                container.scrollTop +
+                yOffset;
+
+            container.scrollTo({ top: scrollY, behavior: "smooth" });
+        }
+    };
 
     const handleSearch = async () => {
         const isAuth = await ensureAuthenticated();
@@ -90,6 +182,7 @@ const HomePage = () => {
                 toast.info("No matching products found.");
             }
             setProducts(data);
+            scrollToProducts();
         } catch (err) {
             console.error(err);
             toast.error("Failed to fetch products.");
@@ -116,6 +209,7 @@ const HomePage = () => {
             }
 
             setProducts(data);
+            scrollToProducts();
         } catch (err) {
             console.error(err);
             toast.error("Failed to fetch combo products.");
@@ -182,13 +276,17 @@ const HomePage = () => {
 
                     <div className="hero-section">
                         <h1 className="hero-title">Shop Fearlessly Shop EagleHub</h1>
+                        <h3 className="scroll-hint">
+                            <span className="scroll-icon"><FaAnglesDown /></span>
+                            Scroll to Explore Products !!
+                        </h3>
                     </div>
 
                     <div className="reel-info-container">
                         <div className="reel-box">
                             <video autoPlay loop muted controls>
                                 <source
-                                    src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+                                    src={ReelVideo}
                                     type="video/mp4"
                                 />
                                 Your browser does not support the video tag.
@@ -217,7 +315,7 @@ const HomePage = () => {
                         <p>{offers[currentOfferIndex].text}</p>
                     </div>
 
-                    <div className="product-container">
+                    <div ref={productSectionRef} className="product-container">
                         <div className="product-heading">
                             <h2>🔥 Trending Now</h2>
                             <p>
@@ -235,7 +333,12 @@ const HomePage = () => {
                             >
                                 <img src={prod.image_urls[0]} alt={prod.name} />
                                 <h3>{prod.name}</h3>
-                                <p>{prod.description}</p>
+                                <p>
+                                    {prod.description.length > 100
+                                        ? prod.description.substring(0, 100) + "..."
+                                        : prod.description}
+                                </p>
+
                                 <p>₹{prod.mrp}</p>
                             </div>
                         ))}
