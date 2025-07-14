@@ -6,6 +6,7 @@ import "./admin_dashboard.css";
 import { BiSearchAlt } from "react-icons/bi";
 import { ensureAuthenticated } from "../utils/authUtils";
 import { useNavigate } from "react-router-dom";
+import { FaRegLightbulb } from "react-icons/fa";
 
 const AdminDashboard = () => {
     const [products, setProducts] = useState([]);
@@ -25,19 +26,136 @@ const AdminDashboard = () => {
         add_quantity: "",
     });
     const [editingId, setEditingId] = useState(null);
+    const [showOrderTip, setShowOrderTip] = useState(false);
     const [mediaPreview, setMediaPreview] = useState([]);
+    const [showFilterPanel, setShowFilterPanel] = useState(false);
     const [showProductList, setShowProductList] = useState(false);
-
+    const [filtersManuallyApplied, setFiltersManuallyApplied] = useState(false);
     const [coupons, setCoupons] = useState([]);
     const [couponCode, setCouponCode] = useState("");
     const navigate = useNavigate();
     const [couponDiscount, setCouponDiscount] = useState("");
-
     const [showFilters, setShowFilters] = useState(false);
     const [category, setCategory] = useState("");
     const [priceMin, setPriceMin] = useState("");
     const [priceMax, setPriceMax] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
+    const [showOrders, setShowOrders] = useState(false);
+    const [orders, setOrders] = useState([]);
+    const [filters, setFilters] = useState({
+        name: "",
+        orderId: "",
+        deliveryStatus: "",
+        paymentStatus: "",
+        refundStatus: "",
+        paymentMethod: "",
+        fromDate: "",
+        toDate: ""
+    });
+    const [expandedOrderId, setExpandedOrderId] = useState(null);
+
+    const handleDispatch = async (orderId) => {
+        try {
+            const res = await fetch("https://eaglehub.onrender.com/dispatchorder", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({ razorpay_order_id: orderId }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || "Failed to dispatch order");
+            }
+
+            // Update UI only if backend confirms dispatch
+            const updatedOrders = orders.map((order) =>
+                order._id === orderId ? { ...order, delivery_status: "Dispatched" } : order
+            );
+            setOrders(updatedOrders);
+
+            toast.success(data.message);
+        } catch (err) {
+            console.error("Dispatch error:", err);
+            toast.error(err.message || "Failed to mark order as dispatched.");
+        }
+    };
+
+    const fetchFilteredOrders = async () => {
+        const query = new URLSearchParams();
+        Object.entries(filters).forEach(([key, value]) => {
+            if (value) query.append(key, value);
+        });
+
+        try {
+            const res = await fetch(`https://eaglehub.onrender.com/searchorders?${query.toString()}`, { credentials: "include" });
+            const data = await res.json();
+            const parsedOrders = data.map((order) => ({
+                ...order,
+                _id: order.razorpay_order_id || order._id,
+                shipping_info: {
+                    fullName: order.shipping_info?.full_name || "N/A",
+                    phone: order.shipping_info?.phone || "N/A",
+                    email: order.shipping_info?.email || "N/A",
+                    address: order.shipping_info?.address || "N/A",
+                    city: order.shipping_info?.city || "N/A",
+                    state: order.shipping_info?.state || "N/A",
+                    zip: order.shipping_info?.pincode || "N/A",
+                    country: order.shipping_info?.country || "N/A",
+                },
+                delivery_status: order.delivery_status || "N/A",
+                refund_status: order.refund_status || "N/A",
+                payment_status: order.payment_status || "N/A",
+                order_items: order.order_items || [],
+            }));
+            setOrders(parsedOrders);
+        } catch (error) {
+            console.error("Error fetching filtered orders", error);
+            toast.error("Failed to load filtered orders");
+        }
+    };
+
+    useEffect(() => {
+        if (showOrders && filtersManuallyApplied) fetchFilteredOrders();
+    }, [filters, showOrders]);
+
+
+    const handleRefund = async (orderId) => {
+        const confirmRefund = window.confirm(
+            "Are you sure you want to refund this order? This action cannot be undone."
+        );
+
+        if (!confirmRefund) return;
+
+        try {
+            const res = await fetch("https://eaglehub.onrender.com/confirm_refund", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({ razorpay_order_id: orderId }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || "Refund failed");
+            }
+
+            // Remove order from UI (since backend deletes it)
+            const updatedOrders = orders.filter((order) => order._id !== orderId);
+            setOrders(updatedOrders);
+
+            toast.success(`Refund successful. Refund ID: ${data.refund_id}`);
+        } catch (err) {
+            console.error("Refund error:", err);
+            toast.error(err.message || "Failed to process refund");
+        }
+    };
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -182,7 +300,6 @@ const AdminDashboard = () => {
         }
     };
 
-
     const fetchProducts = async () => {
         try {
             const res = await fetch("https://eaglehub.onrender.com/read", {
@@ -279,7 +396,7 @@ const AdminDashboard = () => {
     const filteredProducts = Array.isArray(products)
         ? products.filter((product) => {
             const matchesCategory =
-            category.trim() === "" || (product.category?.toLowerCase() || "").includes(category.toLowerCase());
+                category.trim() === "" || (product.category?.toLowerCase() || "").includes(category.toLowerCase());
             const matchesMinPrice = priceMin === "" || parseFloat(product.mrp) >= parseFloat(priceMin);
             const matchesMaxPrice = priceMax === "" || parseFloat(product.mrp) <= parseFloat(priceMax);
             const matchesSearch = (product.name?.toLowerCase() || "").includes(searchQuery.toLowerCase());
@@ -377,6 +494,245 @@ const AdminDashboard = () => {
                     </ul>
                 </div>
 
+                <>
+                    {/* View Orders Button */}
+                    <div className="view-orders-btn-container">
+                        <button
+                            className="btn-view-orders"
+                            onClick={() => {
+                                setShowOrders((prev) => {
+                                    const toggled = !prev;
+
+                                    if (toggled) {
+                                        // Only show tip when we're showing orders
+                                        setShowOrderTip(true);
+                                        setTimeout(() => setShowOrderTip(false), 4000);
+                                    }
+
+                                    return toggled;
+                                });
+                                setOrders([]);
+                            }}
+                        >
+                            {showOrders ? "Hide Orders" : "View Orders"}
+                        </button>
+                        {showOrders && (
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                                <input
+                                    type="text"
+                                    className="minimal-input"
+                                    placeholder="Customer Name"
+                                    value={filters.name}
+                                    onChange={(e) => setFilters({ ...filters, name: e.target.value })}
+                                />
+                                <input
+                                    type="text"
+                                    className="minimal-input"
+                                    placeholder="Order ID"
+                                    value={filters.orderId}
+                                    onChange={(e) => setFilters({ ...filters, orderId: e.target.value })}
+                                />
+                                <button onClick={() => setShowFilterPanel(!showFilterPanel)} className="icon-button">
+                                    <IoFilter size={35} />
+                                </button>
+                                <button onClick={() => {
+                                    setFiltersManuallyApplied(true);
+                                    fetchFilteredOrders();
+                                }} className="icon-button">
+                                    <BiSearchAlt size={30} />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                    {showOrderTip && (
+                        <p style={{
+                            marginTop: "10px",
+                            marginLeft: "50px",
+                            color: "#003366",
+                            fontSize: "15px",
+                            backgroundColor: "#eaf1ff",
+                            padding: "10px 15px",
+                            borderRadius: "8px",
+                            border: "1px solid #0040ff",
+                            width: "fit-content"
+                        }}>
+                            Tip <FaRegLightbulb /> : Use search or filters to view specific orders.
+                        </p>
+                    )}
+
+                    {/* Search & Filter */}
+                    {showOrders && showFilterPanel && (
+                        <div className="filter-panel">
+                            <select
+                                className="styled-select"
+                                value={filters.deliveryStatus}
+                                onChange={(e) => setFilters({ ...filters, deliveryStatus: e.target.value })}
+                            >
+                                <option value="">Delivery Status</option>
+                                <option value="Dispatched">Dispatched</option>
+                                <option value="Not Dispatched">Not Dispatched</option>
+                                <option value="Delivered">Delivered</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+
+                            <select
+                                className="styled-select"
+                                value={filters.paymentStatus}
+                                onChange={(e) => setFilters({ ...filters, paymentStatus: e.target.value })}
+                            >
+                                <option value="">Payment Status</option>
+                                <option value="PAID">Paid</option>
+                                <option value="PENDING">Pending</option>
+                            </select>
+
+                            <select
+                                className="styled-select"
+                                value={filters.refundStatus}
+                                onChange={(e) => setFilters({ ...filters, refundStatus: e.target.value })}
+                            >
+                                <option value="">Refund Status</option>
+                                <option value="N/A">N/A</option>
+                                <option value="PENDING">Pending</option>
+                                <option value="PAID">Paid</option>
+                            </select>
+
+                            <select
+                                className="styled-select"
+                                value={filters.paymentMethod}
+                                onChange={(e) => setFilters({ ...filters, paymentMethod: e.target.value })}
+                            >
+                                <option value="">Payment Method</option>
+                                <option value="ONLINE">Online</option>
+                                <option value="COD">Cash on Delivery</option>
+                            </select>
+
+                            <div className="date-wrapper">
+                                <label className="date-label">From:</label>
+                                <input
+                                    type="date"
+                                    className="styled-date"
+                                    value={filters.fromDate}
+                                    onChange={(e) => setFilters({ ...filters, fromDate: e.target.value })}
+                                />
+                            </div>
+
+                            <div className="date-wrapper">
+                                <label className="date-label">To:</label>
+                                <input
+                                    type="date"
+                                    className="styled-date"
+                                    value={filters.toDate}
+                                    onChange={(e) => setFilters({ ...filters, toDate: e.target.value })}
+                                />
+                            </div>
+                        </div>
+
+                    )}
+
+                    {/* Orders Section */}
+                    {showOrders && (
+                        <div
+                            className="orders-section glossy-container"
+                            style={{ marginTop: "30px" }}
+                        >
+                            <h2 className="orders-heading">Placed Orders</h2>
+
+                            {orders.length === 0 ? (
+                                <p className="no-orders">No orders found.</p>
+                            ) : (
+                                <ul className="orders-list">
+                                    {orders.map((order) => (
+                                        <li
+                                            key={order._id}
+                                            className="order-card glossy-card"
+                                            onClick={() =>
+                                                setExpandedOrderId(
+                                                    expandedOrderId === order._id ? null : order._id
+                                                )
+                                            }
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            <div className="order-details-container">
+                                                {/* Always visible: Basic Summary */}
+                                                <div className="order-section">
+                                                    <h3>Order Summary</h3>
+                                                    <p><strong>Order ID:</strong> {order._id}</p>
+                                                    <p><strong>Delivery Status:</strong> {order.delivery_status}</p>
+                                                    <p><strong>Total:</strong> ₹{order.subtotal}</p>
+                                                    <p><strong>Quantity:</strong> {order.total_quantity}</p>
+                                                    <p><strong>Payment:</strong> {order.payment_status}</p>
+                                                </div>
+                                                {/* Expandable Details */}
+                                                {expandedOrderId === order._id && (
+                                                    <>
+                                                        <div className="order-section">
+                                                            <h3>Shipping Information</h3>
+                                                            <p><strong>Name:</strong> {order.shipping_info.fullName}</p>
+                                                            <p><strong>Phone:</strong> {order.shipping_info.phone}</p>
+                                                            <p><strong>Email:</strong> {order.shipping_info.email}</p>
+                                                            <p>
+                                                                <strong>Address:</strong>{" "}
+                                                                {order.shipping_info.address}, {order.shipping_info.city},{" "}
+                                                                {order.shipping_info.state} - {order.shipping_info.zip},{" "}
+                                                                {order.shipping_info.country}
+                                                            </p>
+                                                        </div>
+
+                                                        <div className="order-section">
+                                                            <h3>Payment Details</h3>
+                                                            <p><strong>Method:</strong> {order.payment_method}</p>
+                                                            <p><strong>Status:</strong> {order.payment_status}</p>
+                                                        </div>
+
+                                                        <div className="order-section">
+                                                            <h3>Ordered Items</h3>
+                                                            {order.order_items.map((item, index) => (
+                                                                <div key={index} className="order-item">
+                                                                    <p><strong>Product:</strong> {item.name}</p>
+                                                                    <p><strong>Price:</strong> ₹{item.price}</p>
+                                                                    <p><strong>Quantity:</strong> {item.quantity}</p>
+                                                                    <p><strong>Total:</strong> ₹{item.total}</p>
+                                                                    {item.size && <p><strong>Size:</strong> {item.size}</p>}
+                                                                    {item.colors && <p><strong>Color:</strong> {item.colors}</p>}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                        {(order.payment_status === "PAID" && order.delivery_status === "Cancelled") ? (
+                                                            <div className="refund-button-container">
+                                                                <button
+                                                                    className="btn-refund glossy-button"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        handleRefund(order._id);
+                                                                    }}
+                                                                >
+                                                                    Refund
+                                                                </button>
+                                                            </div>
+                                                        ) : order.delivery_status !== "Dispatched" && (
+                                                            <div className="dispatch-button-container">
+                                                                <button
+                                                                    className="btn-dispatch glossy-button"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation(); // prevent collapsing
+                                                                        handleDispatch(order._id);
+                                                                    }}
+                                                                >
+                                                                    Dispatch
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </>
+                                                )}
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                    )}
+                </>
+
                 {/* View All Products Toggle */}
                 <div className="view-all-btn-container">
                     <button className="btn-view-all" onClick={() => setShowProductList(!showProductList)}>
@@ -422,18 +778,6 @@ const AdminDashboard = () => {
                                         value={category}
                                         onChange={(e) => setCategory(e.target.value)}
                                     />
-                                    {/* <input
-                                    type="number"
-                                    placeholder="Min Price"
-                                    value={priceMin}
-                                    onChange={(e) => setPriceMin(e.target.value)}
-                                />
-                                <input
-                                    type="number"
-                                    placeholder="Max Price"
-                                    value={priceMax}
-                                    onChange={(e) => setPriceMax(e.target.value)}
-                                /> */}
                                 </div>
                             )}
                         </div>

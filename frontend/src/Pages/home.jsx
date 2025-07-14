@@ -48,6 +48,37 @@ const HomePage = () => {
     const [fade, setFade] = useState(true);
 
     useEffect(() => {
+        const verificationStatus = localStorage.getItem("verification_status");
+        const startTime = localStorage.getItem("verification_start_time");
+        if (verificationStatus !== "unverified" || !startTime) return;
+
+        const now = Date.now();
+        const elapsed = now - parseInt(startTime, 10);
+        const twentyFourHours = 24 * 60 * 60 * 1000;
+
+        // If already expired, block the user
+        if (elapsed >= twentyFourHours) {
+            blockUser();
+            return;
+        }
+
+        // ⏱ Reminder loop
+        const notifyInterval = setInterval(() => {
+            toast.warn("⚠️ Reminder: Please verify your email and phone number within 24 hours.");
+        }, 20 * 60 * 1000); 
+
+        // ⏲ Timeout to block after remaining time
+        const blockTimeout = setTimeout(() => {
+            blockUser();
+        }, twentyFourHours - elapsed);
+
+        return () => {
+            clearInterval(notifyInterval);
+            clearTimeout(blockTimeout);
+        };
+    }, []);
+
+    useEffect(() => {
         const interval = setInterval(() => {
             setFade(false);
             setTimeout(() => {
@@ -73,6 +104,34 @@ const HomePage = () => {
             console.error("Error loading initial products", err);
         }
     };
+
+    const blockUser = async () => {
+    try {
+        const res = await fetch("https://eaglehub.onrender.com/block_user", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (res.ok) {
+            // Cleanup
+            localStorage.clear();
+            document.cookie = "access_token=; Max-Age=0";
+            document.cookie = "refresh_token=; Max-Age=0";
+
+            toast.error("⛔ You’ve been blocked due to failure to verify.");
+            setTimeout(() => {
+                window.location.href = "/user_auth"; // redirect to login
+            }, 2000);
+        } else {
+            toast.error("Failed to block user.");
+        }
+    } catch (err) {
+        console.error("Block user error:", err);
+    }
+};
 
     const scrollToProducts = () => {
         const container = document.querySelector(".home-container");

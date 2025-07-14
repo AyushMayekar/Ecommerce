@@ -110,6 +110,10 @@ function AuthScreen({ signIn, toggle }) {
             if (res.ok) {
                 if (data.user_role) {
                     localStorage.setItem("user_role", data.user_role);
+                    localStorage.setItem("verification_status", data.verification_status);
+                    if (data.verification_status === "unverified" && !localStorage.getItem("verification_start_time")) {
+                        localStorage.setItem("verification_start_time", Date.now().toString());
+                    }
                 }
                 Swal.fire({
                     icon: "success",

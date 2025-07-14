@@ -15,6 +15,7 @@ import AuthScreen from './Pages/user_auth';
 import Profile from './Pages/profile';
 import MyOrders from './Pages/myorders';
 import CartPage from './Pages/cart';
+import EmailVerificationPage from './Pages/emailverifcation';
 import AdminDashboard from './Pages/admin_dashboard';
 import { ToastContainer } from 'react-toastify';
 import './style.css';
@@ -52,6 +53,7 @@ function AppWrapper() {
           <Route path="/payment_success" element={<OrderSuccess />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/myorders" element={<MyOrders />} />
+          <Route path="/email_verification" element={<EmailVerificationPage />} />
           <Route path="/user_auth" element={<AuthScreen signIn={signIn} toggle={toggle} />} />
 
           {/* Catch-all: Redirect to home */}

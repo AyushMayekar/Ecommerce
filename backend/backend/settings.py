@@ -26,12 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-4765g=n!m9dnz^^w8g5of*9g211e12=&u9iqgw+@8)k&1f88qc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-# ALLOWED_HOSTS = [ "eaglehub.onrender.com",
-    # "https://eaglehub.in",]
+ALLOWED_HOSTS = [ "eaglehub.onrender.com",
+    "https://eaglehub.in",]
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -41,12 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     "rest_framework", 
     'rest_framework_simplejwt',
+    'csp',
     'multiple_product_page.apps.MultipleProductPageConfig',
     'coldstart.apps.ColdstartConfig',
     'single_product_api.apps.SingleProductApiConfig',
     'user_order_management.apps.UserOrderManagementConfig',
     'admin_order_management.apps.AdminOrderManagementConfig',
     'payment_gateway.apps.PaymentGatewayConfig',
+    'profile_setup.apps.ProfileSetupConfig',
     'admin_operations.apps.AdminOperationsConfig',
     'forgot_password.apps.ForgotPasswordConfig',
     'user_auth.apps.UserAuthConfig',
@@ -61,6 +63,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'csp.middleware.CSPMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -161,7 +164,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://eaglehub.onrender.com",
     "https://eaglehub.in",
-    'http://localhost:5173',  
+    # 'http://localhost:5173',  # TESTING URL
 ]
 
 # CSRF settings
@@ -183,3 +186,73 @@ EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 
 # CRON settings
 CRON_SECRET_TOKEN = os.getenv('CRON_SECRET_TOKEN')
+
+# Resend Email Verification Settings
+RESEND_API_KEY = os.getenv('RESEND_API_KEY')
+SENDER_EMAIL = os.getenv('SENDER_EMAIL')
+FRONTEND_BASE_URL = 'https://eaglehub.in'
+# FRONTEND_BASE_URL = 'http://localhost:5173' # TESTING URL
+
+# FIREBASE SETTINGS
+FIREBASE_API_KEY = os.getenv('FIREBASE_API_KEY')
+PROJECT_ID = os.getenv('PROJECT_ID')
+AUTH_DOMAIN = os.getenv('AUTH_DOMAIN')
+MESSAGING_SENDER_ID = os.getenv('MESSAGING_SENDER_ID')
+STORAGE_BUCKET = os.getenv('STORAGE_BUCKET')
+APP_ID = os.getenv('APP_ID')
+MEASUREMENT_ID = os.getenv('MEASUREMENT_ID')
+
+# CSP settings for Firebase
+CONTENT_SECURITY_POLICY = {
+    "DIRECTIVES": {
+        "default-src": ("'self'",),
+        "script-src": (
+            "'self'",
+            "'unsafe-inline'",
+            "https://www.gstatic.com",
+            "https://www.google.com",
+            "https://www.recaptcha.net",
+            "https://www.googleapis.com",
+        ),
+        "style-src": (
+            "'self'",
+            "'unsafe-inline'",
+            "https://fonts.googleapis.com",
+        ),
+        "img-src": (
+            "'self'",
+            "https://www.gstatic.com",
+            "https://www.google.com",
+            "data:",
+        ),
+        "font-src": (
+            "'self'",
+            "https://fonts.gstatic.com",
+        ),
+        "connect-src": (
+            "'self'",
+            "https://www.googleapis.com",
+            "https://identitytoolkit.googleapis.com",
+            "https://firebase.googleapis.com",
+        ),
+        "frame-src": (
+            "'self'",
+            "https://www.google.com",
+            "https://www.recaptcha.net",
+        ),
+        "frame-ancestors": (
+            "'self'",
+            "https://www.google.com",
+        ),
+    }
+}
+TYPE = os.getenv('type')
+PRIVATE_KEY_ID = os.getenv('private_key_id')
+PRIVATE_KEY = os.getenv('private_key')
+CLIENT_EMAIL = os.getenv('client_email')
+CLIENT_ID = os.getenv('client_id')
+AUTH_URI = os.getenv('auth_uri')
+TOKEN_URI = os.getenv('token_uri')
+AUTH_PROVIDER_X509_CERT_URL = os.getenv('auth_provider_x509_cert_url')
+CLIENT_X509_CERT_URL = os.getenv('client_x509_cert_url')
+UNIVERSE_DOMAIN = os.getenv('universe_domain')
