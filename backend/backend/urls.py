@@ -29,4 +29,5 @@ urlpatterns = [
     path('', include('user_order_management.urls')),
     path('', include('admin_order_management.urls')),
     path('', include('profile_setup.urls')),
+    path('', include('google_oauth.urls')),
 ]

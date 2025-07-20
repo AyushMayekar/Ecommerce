@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'single_product_api.apps.SingleProductApiConfig',
     'user_order_management.apps.UserOrderManagementConfig',
     'admin_order_management.apps.AdminOrderManagementConfig',
+    'google_oauth.apps.GoogleOauthConfig',
     'payment_gateway.apps.PaymentGatewayConfig',
     'profile_setup.apps.ProfileSetupConfig',
     'admin_operations.apps.AdminOperationsConfig',
