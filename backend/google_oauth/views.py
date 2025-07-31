@@ -11,7 +11,8 @@ from django.conf import settings
 from pymongo.errors import PyMongoError
 
 # Mongo setup
-client = pymongo.MongoClient(settings.MONGODB_URL)
+# client = pymongo.MongoClient(settings.MONGODB_URL)
+client = pymongo.MongoClient("mongodb+srv://ecommerce01:ecommerce01@ecommerce.radjgx6.mongodb.net/")  # Local MongoDB for testing
 db = client["EagleHub"]
 users_collection = db["Users"]
 
@@ -35,7 +36,7 @@ class GoogleOAuthView(APIView):
         id_token = request.data.get("id_token")
         if not id_token:
             return Response({"error": "ID token is required"}, status=400)
-
+        print("Received ID Token:", id_token)
         try:
             # 1️⃣ Verify the token using Google
             google_response = requests.get(
@@ -124,20 +125,27 @@ class GoogleOAuthView(APIView):
                 "access_token",
                 access_token,
                 httponly=True,
-                secure=True,
-                samesite="None",
+                # secure=True,
+                secure=False, # testing
+                # samesite="None",
+                samesite="lax", # testing
                 max_age=15 * 60
             )
             response.set_cookie(
                 "refresh_token",
                 refresh_token,
                 httponly=True,
-                secure=True,
-                samesite="None",
+                # secure=True,
+                secure=False, # testing
+                # samesite="None",
+                samesite="lax", # testing
                 max_age=7 * 24 * 60 * 60
             )
-
+            print("ACCESS TOKEN:", access_token)
+            print("REFRESH TOKEN:", refresh_token)
             return response
 
         except Exception as e:
             return Response({"error": f"OAuth login failed: {str(e)}"}, status=500)
+
+

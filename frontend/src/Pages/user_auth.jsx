@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import * as Components from "../Components/reusables";
 import Swal from 'sweetalert2'
+import { useGoogleLogin } from '@react-oauth/google';
 
 function AuthScreen({ signIn, toggle }) {
 
@@ -89,6 +90,64 @@ function AuthScreen({ signIn, toggle }) {
             console.error(error);
         }
     };
+
+    // Google OAuth login handler
+    const loginWithGoogle = useGoogleLogin({
+        onSuccess: async (tokenResponse) => {
+            const idToken = tokenResponse.credential || tokenResponse.access_token;
+
+            try {
+                // const res = await fetch("https://eaglehub.onrender.com/google_oauth", {
+                const res = await fetch("http://127.0.0.1:8000/google_oauth", { //testing
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({ id_token: idToken }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem("user_role", data.user_role);
+                    localStorage.setItem("verification_status", data.verification_status);
+                    if (data.verification_status === "unverified" && !localStorage.getItem("verification_start_time")) {
+                        localStorage.setItem("verification_start_time", Date.now().toString());
+                    }
+
+                    Swal.fire({
+                        icon: "success",
+                        title: "Welcome!",
+                        text: data.message || "Authenticated via Google",
+                    });
+
+                    setTimeout(() => navigate("/home"), 1000);
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Google Login Failed",
+                        text: data.error || "Could not authenticate using Google.",
+                    });
+                }
+            } catch (err) {
+                console.error("Google OAuth error:", err);
+                Swal.fire({
+                    icon: "error",
+                    title: "Server Error",
+                    text: "Something went wrong. Try again later.",
+                });
+            }
+        },
+        onError: () => {
+            Swal.fire({
+                icon: "error",
+                title: "Google Auth Failed",
+                text: "User denied access or error occurred.",
+            });
+        },
+        flow: 'implicit',
+    });
 
     // Sign In submit handler
     const handleSignIn = async (e) => {
@@ -198,7 +257,7 @@ function AuthScreen({ signIn, toggle }) {
                         </div>
 
                         <Components.Button type="submit">Sign Up</Components.Button>
-                        <Components.GoogleButton type="button">
+                        <Components.GoogleButton type="button" onClick={() => loginWithGoogle()}>
                             <FcGoogle size={22} /> Google
                         </Components.GoogleButton>
                     </Components.Form>
@@ -238,7 +297,7 @@ function AuthScreen({ signIn, toggle }) {
                         <Components.Button type="submit">
                             Sign In
                         </Components.Button>
-                        <Components.GoogleButton type="button">
+                        <Components.GoogleButton type="button" onClick={() => loginWithGoogle()}>
                             <FcGoogle size={22} /> Google
                         </Components.GoogleButton>
                     </Components.Form>

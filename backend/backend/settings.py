@@ -28,10 +28,10 @@ SECRET_KEY = 'django-insecure-4765g=n!m9dnz^^w8g5of*9g211e12=&u9iqgw+@8)k&1f88qc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [ "eaglehub.onrender.com",
-    "https://eaglehub.in",]
+# ALLOWED_HOSTS = [ "eaglehub.onrender.com",
+#     "https://eaglehub.in",]
 
-# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*'] #testing
 
 
 # Application definition
@@ -165,7 +165,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://eaglehub.onrender.com",
     "https://eaglehub.in",
-    # 'http://localhost:5173',  # TESTING URL
+    'http://localhost:5173',  # TESTING URL
 ]
 
 # CSRF settings
@@ -257,3 +257,7 @@ TOKEN_URI = os.getenv('token_uri')
 AUTH_PROVIDER_X509_CERT_URL = os.getenv('auth_provider_x509_cert_url')
 CLIENT_X509_CERT_URL = os.getenv('client_x509_cert_url')
 UNIVERSE_DOMAIN = os.getenv('universe_domain')
+
+# Google OAuth Credentials
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
