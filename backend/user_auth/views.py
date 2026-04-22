@@ -17,7 +17,7 @@ from pymongo.errors import PyMongoError
 from bson import ObjectId
 
 SECRET_KEY = settings.JWT_SECRET_KEY
-MONGO_URI = settings. MONGODB_URL
+MONGO_URI = settings.MONGODB_URL
 
 # Setup logging
 logger = logging.getLogger(__name__)

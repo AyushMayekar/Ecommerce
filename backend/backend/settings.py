@@ -31,8 +31,6 @@ DEBUG = False
 ALLOWED_HOSTS = [ "eaglehub.onrender.com",
     "eaglehub.in",]
 
-# ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -47,6 +45,7 @@ INSTALLED_APPS = [
     'single_product_api.apps.SingleProductApiConfig',
     'user_order_management.apps.UserOrderManagementConfig',
     'admin_order_management.apps.AdminOrderManagementConfig',
+    'google_oauth.apps.GoogleOauthConfig',
     'payment_gateway.apps.PaymentGatewayConfig',
     'profile_setup.apps.ProfileSetupConfig',
     'admin_operations.apps.AdminOperationsConfig',
@@ -256,3 +255,7 @@ TOKEN_URI = os.getenv('token_uri')
 AUTH_PROVIDER_X509_CERT_URL = os.getenv('auth_provider_x509_cert_url')
 CLIENT_X509_CERT_URL = os.getenv('client_x509_cert_url')
 UNIVERSE_DOMAIN = os.getenv('universe_domain')
+
+# Google OAuth Credentials
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
