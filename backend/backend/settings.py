@@ -28,10 +28,8 @@ SECRET_KEY = 'django-insecure-4765g=n!m9dnz^^w8g5of*9g211e12=&u9iqgw+@8)k&1f88qc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# ALLOWED_HOSTS = [ "eaglehub.onrender.com",
-#     "https://eaglehub.in",]
-
-ALLOWED_HOSTS = ['*'] #testing
+ALLOWED_HOSTS = [ "eaglehub.onrender.com",
+    "eaglehub.in",]
 
 
 # Application definition
@@ -165,11 +163,11 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "https://eaglehub.onrender.com",
     "https://eaglehub.in",
-    'http://localhost:5173',  # TESTING URL
+    # 'http://localhost:5173',  # TESTING URL
 ]
 
 # CSRF settings
-CSRF_TRUSTED_ORIGINS = ['https://eaglehub.in', 'https://eaglehub.onrender.com']
+CSRF_TRUSTED_ORIGINS = ['https://eaglehub.in', 'https://eaglehub.onrender.com',]
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SECURE = True
