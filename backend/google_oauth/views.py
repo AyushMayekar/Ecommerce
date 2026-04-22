@@ -11,8 +11,7 @@ from django.conf import settings
 from pymongo.errors import PyMongoError
 
 # Mongo setup
-# client = pymongo.MongoClient(settings.MONGODB_URL)
-client = pymongo.MongoClient("mongodb+srv://ecommerce01:ecommerce01@ecommerce.radjgx6.mongodb.net/")  # Local MongoDB for testing
+client = pymongo.MongoClient(settings.MONGODB_URL)
 db = client["EagleHub"]
 users_collection = db["Users"]
 
